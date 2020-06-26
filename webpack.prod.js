@@ -85,7 +85,7 @@ module.exports = {
   },
 
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({ root: buildPath }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       inject: true,
