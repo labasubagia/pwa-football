@@ -1,0 +1,33 @@
+<div class="container">
+  {{!-- Label --}}
+  <br>
+  <h5 class="page-title center-align">
+    Standing
+  </h5>
+  <br>
+  
+  {{!-- Team List --}}
+  <ul class="collection standing">
+    {{#each table}}
+      <li
+        class="collection-item avatar standing__item" 
+        onclick="location.href = '/#/team?id={{this.team.id}}'"
+        style="cursor: pointer"
+        >
+        {{!-- Team Logo --}}
+        <img src="{{safeurl this.team.crestUrl}}" alt="" class="circle standing__item__image">
+        
+        {{!-- Information --}}
+        <div>
+          <span class="title">{{ this.team.name }}</span>
+          <p class="grey-text darken-4">
+            Position {{ this.position }} <br/>
+            Point {{ this.points }}
+          </p>
+        </div>
+
+      </li>
+      <br>
+    {{/each}}
+  </ul>
+</div>

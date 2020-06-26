@@ -1,0 +1,22 @@
+@import '../../styles/variables';
+
+.standing {
+  border: none !important;
+  overflow: unset;
+
+  &__item {
+    border-radius: $appCardRadius;
+    box-shadow: $appBoxShadow;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;  
+
+    &__image {
+      border-radius: 0;
+      max-width: 40px;
+      max-height: 55px;
+      width: unset !important;
+      height: unset !important;    
+    }
+  }
+}

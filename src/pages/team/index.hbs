@@ -1,0 +1,120 @@
+<div class="container">
+  <div class="team">
+    
+    {{!-- Page title --}}
+    <div class="teamBrand">
+      <br>
+      <h5 class="center-align page-title">{{team.name}}</h5>
+      <br>
+      <img class="teamBrand__logo" alt="logo" src="{{safeurl team.crestUrl}}"/>
+      <br>
+      <p class="center-align grey-text darken-4">{{team.address}}<br>{{team.area.name}}</p>
+
+      {{!-- Show if team is favorite --}}
+      <h6 id="alreadyFavorite" class="grey-text teamAddAction">This is My Team</h6>
+      
+      {{!-- Show if team is not favorite --}}
+      <button 
+        id="btnSetFavorite"
+        class="blue lighten-2 z-depth-0 waves-effect waves-light btn teamAddAction" 
+        >
+        Set as my team
+      </button>
+
+    </div>
+
+    <div class="row">
+
+      {{!-- Basic info --}}
+      <div class="col s12">
+        <div class="card white teamCard">
+          <div class="card-content black-text">
+            <span class="card-title">Basic Info</span>
+            <hr class="teamHorizontalLine">
+            <ul class="collapsible teamCollapsible z-depth-0 grey-text darken-4">
+              
+              {{!-- Stadium --}}
+              <li>
+                <div class="collapsible-header teamCollapsible__header">Stadium</div>
+                <div class="collapsible-body teamCollapsible__body"><span>{{team.venue}}</span></div>
+              </li>
+              
+              {{!-- Color --}}
+              <li>
+                <div class="collapsible-header">Club Color</div>
+                <div class="collapsible-body teamCollapsible__body"><span>{{team.clubColors}}</span></div>
+              </li>
+              
+              {{!-- Address --}}
+              <li>
+                <div class="collapsible-header">Address</div>
+                <div class="collapsible-body teamCollapsible__body"><span">{{team.address}}</span"></div>
+              </li>
+              
+              {{!-- Email --}}
+              {{#if team.email}}
+              <li>
+                <div class="collapsible-header">Email</div>
+                <div class="collapsible-body teamCollapsible__body"><span">{{team.email}}</span"></div>
+              </li>
+              {{/if}}
+
+              {{!-- Website --}}
+              {{#if team.website}}
+              <li>
+                <div class="collapsible-header">Website</div>
+                <div class="collapsible-body teamCollapsible__body"><span">{{team.website}}</span"></div>
+              </li>
+              {{/if}}
+            
+            </ul>      
+          </div>
+        </div>
+      </div>
+
+      {{!-- Competitions --}}
+      <div class="col s12">
+        <div class="card white teamCard">
+          <div class="card-content black-text">
+            <span class="card-title">Competitions</span>
+            <hr class="teamHorizontalLine">
+            <p class="grey-text darken-4">
+              <ul>
+                {{#each team.activeCompetitions}}
+                  <li class="grey-text darken-4">- {{this.name}}</li>
+                {{/each}}
+              </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Next match --}}
+      <div class="col s12">
+        <div class="card white teamCard">
+          <div class="card-content black-text">
+            <span class="card-title">Next Match</span>
+            <hr class="teamHorizontalLine">
+            <ul class="collapsible teamCollapsible__body z-depth-0 grey-text darken-4">
+              {{#each matches}}
+                <li>
+                  <div class="collapsible-header teamCollapsible__body__header">{{this.vsTeam}}</div>
+                  <div class="collapsible-body teamCollapsible__body__body">
+                    <span>
+                      - {{this.competition.name}} <br>
+                      - Matchday {{this.matchday}} <br>
+                      - {{this.matchType}} <br>
+                      - On {{localDate this.utcDate}} <br>
+                      - At {{localTime this.utcDate}} <br>
+                    </span>
+                  </div>  
+                </li>
+              {{/each}}
+            </ul>      
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
