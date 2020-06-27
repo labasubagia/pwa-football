@@ -4,8 +4,8 @@
   "description": "Football app",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.dev.js --mode development",
-    "build": "webpack --config webpack.prod.js --mode production",
+    "start": "webpack-dev-server --config webpack.config.js --mode development",
+    "build": "webpack --config webpack.config.js --mode production",
     "preview": "npm run build && http-server dist"
   },
   "keywords": [],
@@ -36,6 +36,7 @@
     "@babel/runtime": "^7.10.3",
     "handlebars": "^4.7.6",
     "idb": "^5.0.4",
-    "materialize-css": "^1.0.0-rc.2"
+    "materialize-css": "^1.0.0-rc.2",
+    "webpack-pwa-manifest": "^4.2.0"
   }
 }

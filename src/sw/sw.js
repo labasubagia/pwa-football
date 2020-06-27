@@ -5,13 +5,19 @@ import { SW_CACHE_NAME, API_BASE_URL } from '../script/const';
 const LOG_LABEL = '[Service Worker]';
 
 // Resources need to be offline
+// NOTE: When use native service worker please match filename in webpack config
 const urlToCache = [
   '/',
+  '/favicon.ico',
   '/img/undraw_choose.svg',
   '/img/undraw_server_down.svg',
   '/img/undraw_warning.svg',
+  '/icon_192x192.png',
+  '/icon_512x512.png',
   '/index.html',
+  '/index.css',
   '/index.js',
+  '/manifest.json',
 ];
 
 

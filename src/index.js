@@ -1,25 +1,22 @@
-import { compile } from 'handlebars';
 import { registerServiceWorker } from './sw/register';
 import './styles/main.scss';
 
-// Templates
-import loadingTemplate from './partial/loading/index.hbs';
-import navigationTemplate from './partial/navigation/index.hbs';
-import { initSidenav, closeSidenav } from './partial/navigation/index';
+// Partial
+import Loading from './partial/loading';
+import Navigation from './partial/navigation';
 
 // Import Routes
 import Standing from "./pages/standing";
 import Team from './pages/team';
 import Info from './pages/info';
 
-// Navigation DOM 
-const navigation = document.querySelector('#nav');
-navigation.innerHTML = compile(navigationTemplate)();
-initSidenav('.sidenav');
+// Navigation Partial 
+const navigationDOM = document.querySelector('#nav');
+const navigation = new Navigation(navigationDOM, '.sidenav');
 
-// Loading DOM
-const loading = document.querySelector('#progress');
-loading.innerHTML = compile(loadingTemplate)();
+// Loading Partial
+const loadingDOM = document.querySelector('#progress');
+const loading = new Loading(loadingDOM);
 
 /** 
  * Handle location hash changed
@@ -39,8 +36,8 @@ const hashHandler = async () => {
     }
     param = new URLSearchParams(param);
 
-    showLoading();
-    closeSidenav('.sidenav');
+    loading.show();
+    navigation.closeSidenav();
 
     // App
     const app = document.querySelector('#app');
@@ -63,14 +60,13 @@ const hashHandler = async () => {
       
       // 404 page
       default:
-        const title = '404';
+        pageTitle = '404';
         await Info({
           element: app, 
-          title: title, 
+          title: pageTitle, 
           message: 'Page not found, please check your url!',
           timeout: 500,
         });
-        pageTitle = title;
     }
 
   } catch (error) {
@@ -80,18 +76,9 @@ const hashHandler = async () => {
   } finally {
     // Change title
     document.title = pageTitle;
-    showLoading(false);
+    loading.hide();
   }
 }
-
-/**
- * Show and hide loading indicator
- * @param {Boolean} state 
- */
-const showLoading = (state = true) => {
-  loading.style.display = state ? 'block' : 'none';
-}
-
 
 // Init data
 const init = async () => {

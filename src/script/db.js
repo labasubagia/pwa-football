@@ -19,7 +19,8 @@ const database = async () => {
   // When it supported
   return await openDB(DB_NAME, DB_VERSION, {
     upgrade(db) {
-      db.createObjectStore(DB_OBJECT_STORE_NAME, { keyPath: 'id' });
+      db.createObjectStore(DB_OBJECT_STORE_NAME, { keyPath: 'id' })
+        .createIndex('name', 'name', { unique: false });
     },
   });
 }

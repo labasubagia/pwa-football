@@ -1,27 +1,49 @@
-import { Sidenav } from "materialize-css/dist/js/materialize.min.js";
+import navigationTemplate from './index.hbs';
+import { Sidenav } from "materialize-css";
+import { compile } from 'handlebars';
 
-/**
- * Init sidenav in Navigation when DOM loaded
- * @param {String} selector 
- */
-const initSidenav = selector => 
-  document.addEventListener('DOMContentLoaded', () => {
-    const elems = document.querySelectorAll(selector);
-    Sidenav.init(elems);
-  });
+// Local log
+const LOG_LABEL = '[Navigation Partial]';
 
+// Navigation partal class
+class Navigation {
 
-/**
- * Close sidenav
- * @param {String} selector 
- */
-const closeSidenav = selector => {
-  const elem = document.querySelector(selector);
-  const instance = new Sidenav.getInstance(elem);
-  instance && instance.close();
+  /**
+   * Init navigation
+   * @param {Element} element parent element to attach
+   * @param {String} sidenavSelector DOM selector
+   */
+  constructor(element, sidenavSelector) {
+    try {
+      // Pass to local attributes
+      this.element = element;
+      this.sidenavSelector = sidenavSelector;
+
+      // Compile navigation
+      this.element.innerHTML = compile(navigationTemplate)();
+
+      // Sidenav init
+      document.addEventListener('DOMContentLoaded', () => {
+
+        // Sidnav
+        const elems = document.querySelectorAll(this.sidenavSelector);
+        Sidenav.init(elems);
+
+        // Sidenav instance
+        this.instance = new Sidenav.getInstance(elems[0]);
+      })
+
+    } catch (error) {
+      console.error(`${LOG_LABEL} Cannot load partial ${error}`);
+    }
+  }
+
+  /**
+   * Close sidenav
+   */
+  closeSidenav () {
+    this.instance && this.instance.close();
+  }
 }
 
-export {
-  initSidenav,
-  closeSidenav,
-}
+export default Navigation;

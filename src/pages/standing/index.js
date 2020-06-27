@@ -25,10 +25,8 @@ Handlebars.registerHelper('safeurl', safeUrl);
 const Standing = async (element) => {
   try {
     const data = await getStanding();
-    if (data) {
-      const context = { table: data.standings[0].table };
-      element.innerHTML = compile(standingTemplate)(context);
-    }
+    const context = { table: data.standings[0].table };
+    element.innerHTML = compile(standingTemplate)(context);
   } catch (error) {
     if (!navigator.onLine) {
       await Info({
