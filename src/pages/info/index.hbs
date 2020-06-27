@@ -4,15 +4,11 @@
   <img class="responsive-img info__img" src="{{image}}" alt="info"/>
   <br>
   <span class="grey-text darken-4 center-align">{{message}}<span><br>
-  {{#if additionalHtml}}
-    {{additionalHtml}}
-  {{else}}
-    <br>
-    <button 
-      onclick="history.back()" 
-      class="blue lighten-2 z-depth-0 waves-effect waves-light btn"
-      >
-      or back to previous page
-    </button>
-  {{/if}}
+  <br>
+  <button
+    id="btnAction" 
+    class="blue lighten-2 z-depth-0 waves-effect waves-light btn"
+    >
+    {{actionText}}
+  </button>
 </div>

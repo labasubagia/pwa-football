@@ -11,8 +11,10 @@ import {
   PAGE_INFO_CONTENT_SERVER_ERROR_MESSAGE,
   PAGE_INFO_CONTENT_NETWORK_ERROR_TITLE,
   PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE,
+  PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
 } from '../../script/const'
 import { localDate, localTime } from '../../script/util';
+import { refreshAppContent } from '../../index';
 import './index.scss';
 
 // Local label
@@ -51,16 +53,24 @@ const Team = async (element, id) => {
     init({ ...team, matches });
   
   } catch(error) {
+    // Info params
+    const pageInfoParams = {
+      element, 
+      actionText: PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
+      callback: refreshAppContent,
+    };
+
+    // Show info error
     if (!navigator.onLine) {
       await Info({
-        element, 
+        ...pageInfoParams,
         title: PAGE_INFO_CONTENT_NETWORK_ERROR_TITLE, 
         message: PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE,
       });
     } else {
       await Info({
-        element, 
-        type: PAGE_INFO_IMG_SERVER_ERROR,
+        ...pageInfoParams,
+        image: PAGE_INFO_IMG_SERVER_ERROR,
         title: PAGE_INFO_CONTENT_SERVER_ERROR_TITLE, 
         message: PAGE_INFO_CONTENT_SERVER_ERROR_MESSAGE,
       });

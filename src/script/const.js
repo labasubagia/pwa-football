@@ -19,6 +19,8 @@ const PAGE_INFO_CONTENT_SERVER_ERROR_TITLE = 'Server Error!';
 const PAGE_INFO_CONTENT_SERVER_ERROR_MESSAGE = 'An error ocurs in server, please try again later!';
 const PAGE_INFO_CONTENT_NETWORK_ERROR_TITLE = 'Network Error!';
 const PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE = 'Please check your internet connection and try again later!';
+const PAGE_INFO_CONTENT_ACTION_TEXT_BACK = 'Back to previous page';
+const PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD = 'Reload page';
 
 export { 
   // Browser features
@@ -48,4 +50,6 @@ export {
   PAGE_INFO_CONTENT_SERVER_ERROR_MESSAGE,
   PAGE_INFO_CONTENT_NETWORK_ERROR_TITLE,
   PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE,
+  PAGE_INFO_CONTENT_ACTION_TEXT_BACK,
+  PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
 }

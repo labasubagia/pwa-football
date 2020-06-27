@@ -97,4 +97,16 @@ const init = async () => {
   });
 }
 
+/**
+ * Refresh content inside app sheell
+ * Trigger hashchange event in order to refresh page
+ */
+const refreshAppContent = () => {
+  hashHandler();
+  console.log('[App Shell] Reload page');
+}
+
+// Register service worker
 registerServiceWorker(init);
+
+export { refreshAppContent };
