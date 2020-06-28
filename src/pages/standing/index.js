@@ -54,7 +54,7 @@ const Standing = async (element) => {
       });
     }
     
-    console.log(`${LOG_LABEL} Cannot load page ${error}`);
+    console.error(`${LOG_LABEL} Cannot load page ${error}`);
   }
 }
 

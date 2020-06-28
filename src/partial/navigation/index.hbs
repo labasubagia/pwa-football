@@ -1,5 +1,5 @@
 {{!-- Navigation --}}
-<nav class="white z-depth-0 nav-component">
+<nav class="white z-depth-0 navbarComponent">
   <div class="nav-wrapper container">
 
     {{!-- Logo Text --}}
@@ -10,16 +10,16 @@
     
     {{!-- TopNav --}}
     <ul class="right hide-on-med-and-down">
-      <li><a href="#/" class="black-text">Home</a></li>
-      <li><a href="#/" class="black-text">Matches</a></li>
-      <li><a href="#/" class="black-text">My Team</a></li>
+      {{#each routes}}
+        <li><a href="{{this.link}}" class="black-text">{{this.label}}</a></li>
+      {{/each}}
     </ul>
 
     {{!-- Sidenav --}}
     <ul id="mobile-nav" class="sidenav">
-      <li><a class="waves-effect" href="#/">Home</a></li>
-      <li><a class="waves-effect" href="#/">Matches</a></li>
-      <li><a class="waves-effect" href="#/">My Team</a></li>
+      {{#each routes}}
+        <li><a href="{{this.link}}" class="waves-effect">{{this.label}}</a></li>
+      {{/each}}
     </ul>
   </div>
 </nav>

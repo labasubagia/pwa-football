@@ -27,7 +27,20 @@ self.addEventListener('install', event => {
   // Cache files all
   const preCache = async () => {
     const cache = await caches.open(SW_CACHE_NAME);
-    return cache.addAll(urlToCache);
+    
+    // // Add all url at once
+    // return cache.addAll(urlToCache);
+    
+    // Add url one by one
+    return Promise.all(
+      urlToCache.map(async url => {
+        try {
+          return cache.add(url);
+        } catch (error) {
+          console.error(`${LOG_LABEL} Install Cache failed ${url}: ${error.message}`);
+        }
+      })
+    );
   } 
 
   // Run precache
@@ -87,8 +100,10 @@ self.addEventListener('fetch', event => {
   };
 
   // Service worker fetch event Respond
+  const url = safeUrl(event.request.url);
   event.respondWith(
-    safeUrl(event.request.url).includes(API_BASE_URL)
+    url.includes(API_BASE_URL)
+    || url.includes(location.origin)
       ? addToCache()
       : checkOnCache()
   );

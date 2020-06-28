@@ -1,0 +1,9 @@
+@import '../../styles/variables'; 
+
+.navbar-fixed {
+  z-index: 999 !important;
+}
+
+.navbarComponent {
+  box-shadow: $appBoxShadow;
+}

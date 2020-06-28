@@ -1,4 +1,5 @@
 import { registerServiceWorker } from './sw/register';
+import { APP_CONTAINER_SELECTOR } from './script/const';
 import './styles/main.scss';
 
 // Partial
@@ -8,6 +9,7 @@ import Navigation from './partial/navigation';
 // Import Routes
 import Standing from "./pages/standing";
 import Team from './pages/team';
+import MyTeam from './pages/myteam';
 import Info from './pages/info';
 
 // Navigation Partial 
@@ -40,7 +42,7 @@ const hashHandler = async () => {
     navigation.closeSidenav();
 
     // App
-    const app = document.querySelector('#app');
+    const app = document.querySelector(APP_CONTAINER_SELECTOR);
 
     // Set app content
     switch(hash) {
@@ -58,14 +60,21 @@ const hashHandler = async () => {
         await Team(app, id);
         break;
       
+      // My Team
+      case '#/myteam':
+        pageTitle = 'My Team';
+        await MyTeam(app);
+        break;
+
       // 404 page
       default:
+        const page = hash.substr(2);
         pageTitle = '404';
         await Info({
           element: app, 
           title: pageTitle, 
-          message: 'Page not found, please check your url!',
-          timeout: 500,
+          message: `Page <strong>${page}</strong> not found, please check your url!`,
+          timeout: 1000,
         });
     }
 
