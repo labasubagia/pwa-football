@@ -48,9 +48,6 @@ const Info = async ({
     }, 
   }) => {
   try {
-    
-    // Pretend to loading
-    timeout && await waitTimeout(timeout);
 
     // Compile template
     element.innerHTML = compile(errorTemplate)({ image: images[image], title, message, actionText });
@@ -60,6 +57,9 @@ const Info = async ({
     if(btnActionDOM) {
       btnActionDOM.addEventListener('click', callback);
     }
+
+    // Pretend to loading
+    timeout && await waitTimeout(timeout);
 
   } catch (error) {
     console.error(`${LOG_LABEL} Failed to load ${error}`);
