@@ -1,20 +1,11 @@
 import Handlebars, { compile } from 'handlebars';
 import teamTemplate from './index.hbs';
-import Info from '../info';
 import { Collapsible, toast } from 'materialize-css';
 import { getTeam, getTeamMatches } from '../../script/api';
 import { insert, read, remove } from '../../script/db';
-import { 
-  DB_OBJECT_STORE_NAME, 
-  PAGE_INFO_IMG_SERVER_ERROR, 
-  PAGE_INFO_CONTENT_SERVER_ERROR_TITLE,
-  PAGE_INFO_CONTENT_SERVER_ERROR_MESSAGE,
-  PAGE_INFO_CONTENT_NETWORK_ERROR_TITLE,
-  PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE,
-  PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
-} from '../../script/const'
+import { DB_OBJECT_STORE_NAME, ERROR_FAILED_TO_FETCH } from '../../script/const'
 import { localDate, localTime } from '../../script/util';
-import { refreshAppContent } from '../../index';
+import { InfoAsNetworkError, InfoAsServerError } from '../info';
 import './index.scss';
 
 // Local label
@@ -53,29 +44,15 @@ const Team = async (element, id) => {
     init({ ...team, matches });
   
   } catch(error) {
-    // Info params
-    const pageInfoParams = {
-      element, 
-      actionText: PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
-      callback: refreshAppContent,
-    };
 
     // Show info error
-    if (!navigator.onLine) {
-      await Info({
-        ...pageInfoParams,
-        title: PAGE_INFO_CONTENT_NETWORK_ERROR_TITLE, 
-        message: PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE,
-      });
+    if (!navigator.onLine || error.message == ERROR_FAILED_TO_FETCH) {
+      await InfoAsNetworkError(element);
     } else {
-      await Info({
-        ...pageInfoParams,
-        image: PAGE_INFO_IMG_SERVER_ERROR,
-        title: PAGE_INFO_CONTENT_SERVER_ERROR_TITLE, 
-        message: PAGE_INFO_CONTENT_SERVER_ERROR_MESSAGE,
-      });
+      await InfoAsServerError(element);
     }
-    console.error(`${LOG_LABEL} Cannot load page ${error}`);
+    
+    console.error(`${LOG_LABEL} ${error}`);
   }
 }
 

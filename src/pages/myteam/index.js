@@ -1,13 +1,15 @@
 import myTeamTemplate from './index.hbs';
-import Info from '../info';
-import { compile } from 'handlebars';
-import { read } from '../../script/db';
+import Handlebars, { compile } from 'handlebars';
+import { Collapsible, toast } from 'materialize-css';
+import { localDate, localTime } from '../../script/util';
+import { read, remove } from '../../script/db';
 import { 
   DB_OBJECT_STORE_NAME, 
   PAGE_INFO_IMG_EMPTY, 
   PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD 
 } from '../../script/const';
 import { refreshAppContent } from '../../index'
+import { Info } from '../info';
 import './index.scss';
 
 // Local log
@@ -18,6 +20,11 @@ const LOG_LABEL = '[MyTeam Page]';
  * @param {Element} element 
  */
 const MyTeam = async (element) => {
+
+  // Helper
+  Handlebars.registerHelper('localDate', localDate);
+  Handlebars.registerHelper('localTime', localTime);
+
   try {
 
     // Get data
@@ -64,7 +71,7 @@ const MyTeam = async (element) => {
       callback: refreshAppContent,
     });
 
-    console.error(`${LOG_LABEL} Cannot load page ${error}`);
+    console.error(`${LOG_LABEL} ${error}`);
   }
 }
 
@@ -73,15 +80,39 @@ const MyTeam = async (element) => {
  */
 const getMyTeam = async () => {
   const teams = await read({ objecrStore: DB_OBJECT_STORE_NAME });
-  return teams[0];
-} 
+  return teams.length ? teams[0] : null;
+}
 
+/**
+ * Unselect favorite team
+ * @param {Int} keyPath 
+ */
+const unSelectMyTeam = async (keyPath) => {
+  try {
+    await remove({ objectStore: DB_OBJECT_STORE_NAME, keyPath });
+    refreshAppContent();
+    toast({html: 'Unselect team succeed'});
+  } catch (error) {
+    toast({html: 'Unselect team failed'});
+    console.error(`${LOG_LABEL} Unselect failed ${error.message}`);
+  }
+}
 
 /**
  * Init
  * @param {Object} team
  */
-const init = (team) => {
+const init = async (team) => {
+
+  // Init collabsible
+  const elems = document.querySelectorAll('.collapsible');
+  Collapsible.init(elems);
+
+  // Unset action
+  const btnUnset = document.querySelector('#btnUnset');
+  btnUnset.addEventListener('click', () => {
+    unSelectMyTeam(team.id);
+  });
 
 }
 

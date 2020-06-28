@@ -10,7 +10,7 @@ import Navigation from './partial/navigation';
 import Standing from "./pages/standing";
 import Team from './pages/team';
 import MyTeam from './pages/myteam';
-import Info from './pages/info';
+import { Info } from './pages/info';
 
 // Navigation Partial 
 const navigationDOM = document.querySelector('#nav');

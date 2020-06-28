@@ -6,7 +6,13 @@ import {
   PAGE_INFO_IMG_WARNING,
   PAGE_INFO_IMG_EMPTY,
   PAGE_INFO_CONTENT_ACTION_TEXT_BACK,
+  PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
+  PAGE_INFO_CONTENT_NETWORK_ERROR_TITLE,
+  PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE,
+  PAGE_INFO_CONTENT_SERVER_ERROR_TITLE,
+  PAGE_INFO_CONTENT_SERVER_ERROR_MESSAGE,
 } from '../../script/const';
+import { refreshAppContent } from '../../index';
 import './index.scss';
 
 // Local log
@@ -66,4 +72,36 @@ const Info = async ({
   }
 }
 
-export default Info;
+/**
+ * Info show network error
+ * @param {Element} element 
+ */
+const InfoAsNetworkError = async (element) => {
+  await Info({
+    element, 
+    actionText: PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
+    callback: refreshAppContent,
+    title: PAGE_INFO_CONTENT_NETWORK_ERROR_TITLE, 
+    message: PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE,
+  })
+}
+
+/**
+ * Info show server error
+ * @param {Element} element 
+ */
+const InfoAsServerError = async (element) => {
+  await Info({
+    element, 
+    actionText: PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
+    callback: refreshAppContent,
+    title: PAGE_INFO_CONTENT_SERVER_ERROR_TITLE, 
+    message: PAGE_INFO_CONTENT_SERVER_ERROR_MESSAGE,
+  })
+}
+
+export {
+  Info,
+  InfoAsNetworkError,
+  InfoAsServerError, 
+};

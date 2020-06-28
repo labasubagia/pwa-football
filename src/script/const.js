@@ -22,6 +22,8 @@ const PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE = 'Please check your internet conn
 const PAGE_INFO_CONTENT_ACTION_TEXT_BACK = 'Back to previous page';
 const PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD = 'Reload page';
 
+const ERROR_FAILED_TO_FETCH = 'Failed to fetch';
+
 export { 
   // Browser features
   BROWSER_SERVICE_WORKER,
@@ -52,4 +54,7 @@ export {
   PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE,
   PAGE_INFO_CONTENT_ACTION_TEXT_BACK,
   PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
+
+  // Error
+  ERROR_FAILED_TO_FETCH,
 }

@@ -1,1 +1,49 @@
 @import '../../styles/variables';
+
+.teamBrand {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__logo {
+    width: 10rem;
+  }
+}
+
+.teamHorizontalLine {
+  border: $appHorizontalLine;
+  margin-bottom: 1rem;
+}
+
+.teamCard {
+  box-shadow: $appBoxShadow;
+  border-radius: $appCardRadius;
+}
+
+.teamCollapsible {
+  border-top: $appBorder !important;
+  border-left: $appBorder !important;
+  border-right: $appBorder !important;
+
+  &__header {
+    border-bottom: $appBorder !important;
+  }
+
+  &__body {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// Action button
+.teamAddAction {
+  margin: 1rem 0 2rem;
+}
+
+
+// Remove card x axis padding
+.row .col {
+  padding: 0;
+}

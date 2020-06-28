@@ -1,7 +1,8 @@
 import { 
   API_BASE_URL, 
   BROWSER_CACHE, 
-  API_CONFIG_COMPETITION 
+  API_CONFIG_COMPETITION,
+  ERROR_FAILED_TO_FETCH, 
 } from './const';
 import { safeUrl } from './util'
 
@@ -11,6 +12,58 @@ const LOG_LABEL = '[Fetch]';
 const headers = {
   'X-Auth-Token': '8e4451c2e3714fb095f3762553f7578a',
 };
+
+/**
+ * Get data from cache first
+ * Update when online is optional
+ * @param {String} url 
+ * @param {Boolean} isOnlineUpdate 
+ */
+const getFromCache = async (url, isOnlineUpdate = true) => {
+  
+  // Check url in cache
+  const cacheResponse = await caches.match(url);
+      
+  // Cache data is exist
+  if (cacheResponse) {
+
+    // Assingn cache data
+    const cacheData = await cacheResponse.clone().json();
+  
+    // Browser is online
+    if (navigator.onLine && isOnlineUpdate) {
+
+      console.log(`${LOG_LABEL} Check data to ${url}`);
+
+      // When connection slow
+      // Abort fetch
+      const controller = new AbortController();
+      const { signal } = controller;
+
+      // Throw AbortError when time is up
+      setTimeout(() => controller.abort(), 5000);
+      
+      // Get server data
+      const serverResponse = await fetch(url, { headers, signal });
+      const serverData = await serverResponse.clone().json();
+      
+      console.log(`${LOG_LABEL} Check data retrived from ${url}`);
+
+      // Compare server & cache data
+      // Use server data when data not same
+      if (JSON.stringify(cacheData) != JSON.stringify(serverData)) {
+        console.log(`${LOG_LABEL} Update from ${url}`);
+        return serverData;
+      }
+    }
+    
+    // Load from cache
+    console.log(`${LOG_LABEL} Local ${url}`);
+    return cacheData;
+  }
+
+  return null;
+}
 
 /**
  * Fetch GET Request
@@ -28,55 +81,16 @@ const getRequest = async (url, queryParams = null) => {
   // Make url safe
   url = safeUrl(url);
 
-  // Define cache data
-  let cacheData = null;
-
   try {
 
     // When browser support cache
     // Load from cache first
     if (BROWSER_CACHE in window) {  
       
-      // Check url in cache
-      const cacheResponse = await caches.match(url);
-      
-      // Cache data is exist
-      if (cacheResponse) {
-
-        // Assingn cache data
-        cacheData = await cacheResponse.clone().json();
-      
-        // Browser is online
-        if (navigator.onLine) {
-
-          console.log(`${LOG_LABEL} Check data to ${url}`);
-
-          // When connection slow
-          // Abort fetch
-          const controller = new AbortController();
-          const { signal } = controller;
-
-          // Throw AbortError when time is up
-          setTimeout(() => controller.abort(), 5000);
-          
-          // Get server data
-          const serverResponse = await fetch(url, { headers, signal });
-          const serverData = await serverResponse.clone().json();
-          
-          console.log(`${LOG_LABEL} Check data retrived from ${url}`);
-
-          // Compare server & cache data
-          // Use server data when data not same
-          if (JSON.stringify(cacheData) != JSON.stringify(serverData)) {
-            console.log(`${LOG_LABEL} Update from ${url}`);
-            return serverData;
-          }
-        }
-        
-        // Load from cache
-        console.log(`${LOG_LABEL} Local ${url}`);
-        return cacheData;
-      }
+      // Get data from cache
+      // If online, try to request online data
+      let cacheFirstData = await getFromCache(url);
+      if (cacheFirstData) return cacheFirstData;
     } 
     
     // When browser doesn't support cache or cache not exist
@@ -87,15 +101,26 @@ const getRequest = async (url, queryParams = null) => {
 
   } catch (error) {
 
+    // Try to get cache data
+    const cacheData = await getFromCache(url, false);
+    
     // Abort error return cache data
-    if(cacheData && error.name === 'AbortError') {
-      console.warn(`${LOG_LABEL} ${error.name} Connection to slow`);
+    if (error.name === 'AbortError') {
+      console.warn(`${LOG_LABEL} ${error.name} Connection is to slow`);
+      
+      // Return cache if exist
+      if (cacheData) return cacheData;
+    }
+
+    // When try request online data and fail
+    // Use local data if exist
+    if (error.message === ERROR_FAILED_TO_FETCH && cacheData) {
+      console.warn(`${LOG_LABEL} ${error.message}, so use local data`);
       return cacheData;
     }
 
-    // Other error
-    console.error(`${LOG_LABEL} ${error.message}`);
-    return null;
+    // And throw to scope where this function used
+    throw error;
   }
 }
 
