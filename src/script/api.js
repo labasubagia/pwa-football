@@ -21,48 +21,56 @@ const headers = {
  */
 const getFromCache = async (url, isOnlineUpdate = true) => {
   
-  // Check url in cache
-  const cacheResponse = await caches.match(url);
-      
-  // Cache data is exist
-  if (cacheResponse) {
-
-    // Assingn cache data
-    const cacheData = await cacheResponse.clone().json();
+  try {
   
-    // Browser is online
-    if (navigator.onLine && isOnlineUpdate) {
+    // Check url in cache
+    const cacheResponse = await caches.match(url);
+        
+    // Cache data is exist
+    if (cacheResponse) {
 
-      console.log(`${LOG_LABEL} Check data to ${url}`);
-
-      // When connection slow
-      // Abort fetch
-      const controller = new AbortController();
-      const { signal } = controller;
-
-      // Throw AbortError when time is up
-      setTimeout(() => controller.abort(), 5000);
-      
-      // Get server data
-      const serverResponse = await fetch(url, { headers, signal });
-      const serverData = await serverResponse.clone().json();
-      
-      console.log(`${LOG_LABEL} Check data retrived from ${url}`);
-
-      // Compare server & cache data
-      // Use server data when data not same
-      if (JSON.stringify(cacheData) != JSON.stringify(serverData)) {
-        console.log(`${LOG_LABEL} Update from ${url}`);
-        return serverData;
-      }
-    }
+      // Assingn cache data
+      const cacheData = await cacheResponse.clone().json();
     
-    // Load from cache
-    console.log(`${LOG_LABEL} Local ${url}`);
-    return cacheData;
+      // Browser is online
+      if (navigator.onLine && isOnlineUpdate) {
+
+        console.log(`${LOG_LABEL} Check data to ${url}`);
+
+        // When connection slow
+        // Abort fetch
+        const controller = new AbortController();
+        const { signal } = controller;
+
+        // Throw AbortError when time is up
+        setTimeout(() => controller.abort(), 5000);
+        
+        // Get server data
+        const serverResponse = await fetch(url, { headers, signal });
+        const serverData = await serverResponse.clone().json();
+        
+        console.log(`${LOG_LABEL} Check data retrived from ${url}`);
+
+        // Compare server & cache data
+        // Use server data when data not same
+        if (JSON.stringify(cacheData) != JSON.stringify(serverData)) {
+          console.log(`${LOG_LABEL} Update from ${url}`);
+          return serverData;
+        }
+      }
+      
+      // Load from cache
+      console.log(`${LOG_LABEL} Local ${url}`);
+      return cacheData;
+    }
+
+    return null;
+  
+  } catch (error) {
+    // Throw error to scope that is function called
+    throw error;
   }
 
-  return null;
 }
 
 /**

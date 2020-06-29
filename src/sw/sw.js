@@ -7,17 +7,17 @@ const LOG_LABEL = '[Service Worker]';
 // Resources need to be offline
 // NOTE: When use native service worker please match filename in webpack config
 const urlToCache = [
-  '/',
-  '/favicon.ico',
-  '/img/undraw_choose.svg',
-  '/img/undraw_server_down.svg',
-  '/img/undraw_warning.svg',
-  '/icon_192x192.png',
-  '/icon_512x512.png',
-  '/index.html',
-  '/index.css',
-  '/index.js',
-  '/manifest.json',
+  './',
+  './favicon.ico',
+  './img/undraw_choose.svg',
+  './img/undraw_server_down.svg',
+  './img/undraw_warning.svg',
+  './icon_192x192.png',
+  './icon_512x512.png',
+  './index.html',
+  './index.css',
+  './index.js',
+  './manifest.json',
 ];
 
 
@@ -85,18 +85,28 @@ self.addEventListener('fetch', event => {
   
   // Add to cache from server
   const addToCache = async () => {
-    const cache = await caches.open(SW_CACHE_NAME);
-    const response = await fetch(event.request);
-    cache.put(event.request.url, response.clone());
-    console.log(`${LOG_LABEL} Add Cache ${event.request.url}`);
-    return response;
+    try {
+      const cache = await caches.open(SW_CACHE_NAME);
+      const response = await fetch(event.request);
+      cache.put(event.request.url, response.clone());
+      console.log(`${LOG_LABEL} Add to cache ${event.request.url}`);
+      return response;
+    } catch (error) {
+      console.error(`${LOG_LABEL} Event fetch, ${error.message}`);
+      return null;
+    }
   };
 
   // Check in cache
   // Or fetch request
   const checkOnCache = async () => {
-    const response = await caches.match(event.request, { ignoreSearch: true });
-    return response || fetch(event.request);
+    try {
+      const response = await caches.match(event.request, { ignoreSearch: true });
+      return response || fetch(event.request);
+    } catch (error) {
+      console.error(`${LOG_LABEL} Event fetch, ${error.message}`);
+      return null;
+    }
   };
 
   // Service worker fetch event Respond
