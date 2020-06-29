@@ -1,14 +1,14 @@
 import myTeamTemplate from './index.hbs';
 import Handlebars, { compile } from 'handlebars';
 import { Collapsible, toast } from 'materialize-css';
-import { localDate, localTime } from '../../script/util';
+import { localDate, localTime, safeUrl } from '../../script/util';
 import { read, remove } from '../../script/db';
 import { 
   DB_OBJECT_STORE_NAME, 
   PAGE_INFO_IMG_EMPTY, 
   PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD 
 } from '../../script/const';
-import { refreshAppContent } from '../../index'
+import { refreshAppContent } from '../../index';
 import { Info } from '../info';
 import './index.scss';
 
@@ -21,11 +21,16 @@ const LOG_LABEL = '[MyTeam Page]';
  */
 const MyTeam = async (element) => {
 
-  // Helper
-  Handlebars.registerHelper('localDate', localDate);
-  Handlebars.registerHelper('localTime', localTime);
-
   try {
+
+    // Handlebars Helpers
+    [ 
+      { name: 'localDate', method: localDate }, 
+      { name: 'localTime', method: localTime }, 
+      { name: 'safeUrl', method: safeUrl } 
+    ].forEach(({ name, method }) => 
+      Handlebars.registerHelper(name, method)
+    );
 
     // Get data
     const team = await getMyTeam(); 

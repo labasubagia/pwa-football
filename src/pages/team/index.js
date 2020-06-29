@@ -1,10 +1,10 @@
-import Handlebars, { compile } from 'handlebars';
 import teamTemplate from './index.hbs';
+import Handlebars, { compile } from 'handlebars';
 import { Collapsible, toast } from 'materialize-css';
 import { getTeam, getTeamMatches } from '../../script/api';
 import { insert, read, remove } from '../../script/db';
-import { DB_OBJECT_STORE_NAME, ERROR_FAILED_TO_FETCH } from '../../script/const'
-import { localDate, localTime } from '../../script/util';
+import { DB_OBJECT_STORE_NAME, ERROR_FAILED_TO_FETCH } from '../../script/const';
+import { localDate, localTime, safeUrl } from '../../script/util';
 import { InfoAsNetworkError, InfoAsServerError } from '../info';
 import './index.scss';
 
@@ -17,10 +17,17 @@ const LOG_LABEL = '[Team Page]';
  * @param {String, Int} id team id
  */
 const Team = async (element, id) => {
+  
   try {
-    // Helper
-    Handlebars.registerHelper('localDate', localDate);
-    Handlebars.registerHelper('localTime', localTime);
+  
+    // Handlebars Helpers
+    [ 
+      { name: 'localDate', method: localDate }, 
+      { name: 'localTime', method: localTime }, 
+      { name: 'safeUrl', method: safeUrl } 
+    ].forEach(({ name, method }) => 
+      Handlebars.registerHelper(name, method)
+    );
 
     // Request data
     const team = await getTeam(id);

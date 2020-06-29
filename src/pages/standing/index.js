@@ -10,7 +10,7 @@ import './index.scss';
 const LOG_LABEL = '[Standing Page]';
 
 // Register helper function in handlebars template
-Handlebars.registerHelper('safeurl', safeUrl);
+Handlebars.registerHelper('safeUrl', safeUrl);
 
 /**
  * Load standing page into element
