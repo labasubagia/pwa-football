@@ -1,0 +1,104 @@
+<div class="container">
+    
+  <br>
+  <h5 class="page-title center-align">
+    Matches
+  </h5>
+  <br>
+
+  {{!-- Matchday Selector --}}
+  <h6 class="center-align">Select Matchday</h6><br>
+  <div class="row matchday-selector">
+    {{#each totalMatchArray}}
+
+      {{!-- Matchday --}}
+      <div class="col s3 m1">
+        <div 
+          class="
+            {{#if_eq this ../matchday}} 
+              blue lighten-2 white-text
+            {{else}}
+              white grey-text 
+            {{/if_eq}}
+            center-align 
+            matchday
+          "
+          style="cursor:pointer"
+          data-matchday={{this}}
+          >
+          {{this}}
+        </div>
+      </div>
+
+    {{/each}}
+  </div>
+  <br>
+
+  {{!-- Matches --}}
+  <div class="matches">
+    <h6 class="center-align">
+      {{#if_eq currentMatchday matchday}}
+      Current
+      {{/if_eq}}
+      Matchday {{matchday}}
+    </h6>
+    <br>
+    <ul class="collection standing">
+      {{#each matches}}
+        
+        {{!-- Match --}}
+        <li
+          class="collection-item match"
+          style="margin: 1rem 0; width: 100%; padding: 1rem"
+          >
+
+          {{!-- Team --}}
+          <div class="match__team">
+            
+            {{!-- Home --}}
+            <div class="match__score">
+              <span>{{this.homeTeam.name}}</span>  
+              <span class="
+                {{#if_eq this.score.winner 'HOME_TEAM'}} 
+                  blue-text text-lighten-2  
+                {{/if_eq}}
+                ">
+                {{this.score.fullTime.homeTeam}}
+              </span>
+            </div>
+
+            {{!-- Away --}}
+            <div class="match__score">
+              <span>{{this.awayTeam.name}}</span>
+              <span class="
+                {{#if_eq this.score.winner 'AWAY_TEAM'}} 
+                  blue-text text-lighten-2 
+                {{/if_eq}}
+                ">
+                {{this.score.fullTime.awayTeam}} 
+              </span>
+            </div>
+          </div>
+          
+          <hr class="match__hr">
+          
+          {{!-- Time --}}
+          <span class="grey-text">
+            Date {{localDate this.utcDate}}<br>
+            Time {{localTime this.utcDate}}
+          </span><br>
+
+          {{!-- Match Status --}}
+          <div class="{{this.statusColor}} lighten-2 center-align match__status">
+            {{this.statusName}}
+          </div>
+
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+  <br>
+</div>
+
+
+

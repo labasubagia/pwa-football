@@ -173,10 +173,21 @@ const getCompetitionMatches = async (queryParams = null) => {
   return getRequest(url, queryParams);
 }
 
+/**
+ * Get competition info
+ * @param {String} queryParams url params
+ * @return {Promise} 
+ */
+const getCompetitionInfo = async (queryParams = null) => {
+  const url = `${API_BASE_URL}/competitions/${API_CONFIG_COMPETITION}`;
+  return getRequest(url, queryParams);
+}
+
 export {
   getRequest,
   getStanding,
   getTeam,
   getTeamMatches,
   getCompetitionMatches,
+  getCompetitionInfo,
 }

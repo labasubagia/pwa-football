@@ -10,6 +10,7 @@ import Navigation from './partial/navigation';
 import Standing from "./pages/standing";
 import Team from './pages/team';
 import MyTeam from './pages/myteam';
+import Match from './pages/match';
 import { Info } from './pages/info';
 
 // Navigation Partial 
@@ -64,6 +65,13 @@ const hashHandler = async () => {
       case '#/myteam':
         pageTitle = 'My Team';
         await MyTeam(app);
+        break;
+
+      // Match
+      case '#/match':
+        pageTitle = 'Matches';
+        const matchday = param.get('matchday') || null;
+        await Match(app, matchday);
         break;
 
       // 404 page
