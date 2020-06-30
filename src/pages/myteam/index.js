@@ -58,6 +58,29 @@ const MyTeam = async (element) => {
     // Team exist
     else {
 
+      const squadPositionColor = {
+        'Goalkeeper': 'orange',
+        'Defender': 'blue',
+        'Midfielder': 'green',
+        'Attacker': 'red',
+      };
+  
+      const squadPositionShortName = {
+        'Goalkeeper': 'GK',
+        'Defender': 'DF',
+        'Midfielder': 'MF',
+        'Attacker': 'FW',
+      };
+
+      // Modify squad member value to customize UI
+      team.squad = team.squad.map(member => ({
+        ...member,
+        role: String(member.role).split('_').join(' ').toLowerCase(),
+        positionColor: squadPositionColor[member.position] || 'purple',
+        positionShortName: squadPositionShortName[member.position] || 'COACH',
+        age: (new Date()).getFullYear() - (new Date(member.dateOfBirth)).getFullYear(),
+      }));
+
       // Team page
       element.innerHTML = compile(myTeamTemplate)({ team });
 

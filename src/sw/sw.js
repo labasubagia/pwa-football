@@ -32,12 +32,18 @@ self.addEventListener('install', event => {
     // return cache.addAll(urlToCache);
     
     // Add url one by one
+    // So easier to know broken url
     return Promise.all(
       urlToCache.map(async url => {
         try {
           return cache.add(url);
+        
         } catch (error) {
           console.error(`${LOG_LABEL} Install Cache failed ${url}: ${error.message}`);
+
+          // Return promise undefined
+          // Same as cache.add()
+          return Promise.resolve(undefined);
         }
       })
     );
@@ -83,6 +89,12 @@ self.addEventListener('activate', event => {
 // Service worker fetch event
 self.addEventListener('fetch', event => {
   
+  // Null response, use when fetch fail
+  const nullResponse = new Response(JSON.stringify(null), {
+    status: 400,
+    statusText: 'Failed to fetch',
+  });
+
   // Add to cache from server
   const addToCache = async () => {
     try {
@@ -93,7 +105,7 @@ self.addEventListener('fetch', event => {
       return response;
     } catch (error) {
       console.error(`${LOG_LABEL} Event fetch, ${error.message}`);
-      return null;
+      return nullResponse;
     }
   };
 
@@ -105,7 +117,7 @@ self.addEventListener('fetch', event => {
       return response || fetch(event.request);
     } catch (error) {
       console.error(`${LOG_LABEL} Event fetch, ${error.message}`);
-      return null;
+      return nullResponse;
     }
   };
 

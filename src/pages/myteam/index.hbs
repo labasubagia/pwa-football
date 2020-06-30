@@ -14,9 +14,9 @@
       {{!-- Click to unset --}}
       <button 
         id="btnUnset"
-        class="blue lighten-2 z-depth-0 waves-effect waves-light btn teamAddAction" 
+        class="red lighten-2 z-depth-0 waves-effect waves-light btn teamAddAction" 
         >
-        Unset Favorite Team
+        Unselect My Team
       </button>
 
     </div>
@@ -93,11 +93,11 @@
           <div class="card-content black-text">
             <span class="card-title">Next Match</span>
             <hr class="teamHorizontalLine">
-            <ul class="collapsible teamCollapsible__body z-depth-0 grey-text darken-4">
+            <ul class="collapsible teamCollapsible z-depth-0 grey-text darken-4">
               {{#each team.matches}}
                 <li>
-                  <div class="collapsible-header teamCollapsible__body__header">{{this.vsTeam}}</div>
-                  <div class="collapsible-body teamCollapsible__body__body">
+                  <div class="collapsible-header teamCollapsible__header">{{this.vsTeam}}</div>
+                  <div class="collapsible-body teamCollapsible__body">
                     <span>
                       - {{this.competition.name}} <br>
                       - Matchday {{this.matchday}} <br>
@@ -109,6 +109,51 @@
                 </li>
               {{/each}}
             </ul>      
+          </div>
+        </div>
+      </div>
+
+      {{!-- Squad --}}
+      <div class="col s12">
+        <div class="card white teamCard">
+          <div class="card-content black-text">
+            <span class="card-title">Squad</span>
+            <hr class="teamHorizontalLine">
+            <ul class="collapsible teamCollapsible z-depth-0 grey-text darken-4">
+              {{#each team.squad}}
+                <li>
+                  <div class="collapsible-header teamCollapsible__header">
+                    {{this.name}}
+                    <span
+                      class="{{this.positionColor}} lighten-2 badge white-text"
+                      style="border-radius: 2px"
+                      >
+                      {{this.positionShortName}}
+                    </span>
+                  </div>
+                  <div class="collapsible-body teamCollapsible__body">
+                    <span class="capitalize">
+
+                      - {{this.role}} <br>
+
+                      {{#if this.position}}
+                        - Position {{this.position}} <br>
+                      {{/if}}
+
+                      {{#if this.shirtNumber}}
+                        - Shirt Number {{this.shirtNumber}} <br>
+                      {{/if}}
+                      
+                      - From {{this.nationality}} <br>
+                      
+                      - DoB {{localDate this.dateOfBirth}} <br>
+
+                      - Age {{this.age}} <br>
+                    </span>
+                  </div>
+                </li>
+              {{/each}}
+            </ul>
           </div>
         </div>
       </div>

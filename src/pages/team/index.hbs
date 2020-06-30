@@ -95,11 +95,11 @@
           <div class="card-content black-text">
             <span class="card-title">Next Match</span>
             <hr class="teamHorizontalLine">
-            <ul class="collapsible teamCollapsible__body z-depth-0 grey-text darken-4">
+            <ul class="collapsible teamCollapsible z-depth-0 grey-text darken-4">
               {{#each matches}}
                 <li>
-                  <div class="collapsible-header teamCollapsible__body__header">{{this.vsTeam}}</div>
-                  <div class="collapsible-body teamCollapsible__body__body">
+                  <div class="collapsible-header teamCollapsible__header">{{this.vsTeam}}</div>
+                  <div class="collapsible-body teamCollapsible__body">
                     <span>
                       - {{this.competition.name}} <br>
                       - Matchday {{this.matchday}} <br>

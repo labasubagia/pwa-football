@@ -4,6 +4,7 @@ import { ERROR_FAILED_TO_FETCH } from '../../script/const';
 import { safeUrl } from '../../script/util';
 import { getStanding } from '../../script/api';
 import { InfoAsNetworkError, InfoAsServerError } from '../info';
+import defaultIcon from '../../assets/icon/icon_192x192.png';
 import './index.scss';
 
 // Local log
@@ -19,7 +20,7 @@ Handlebars.registerHelper('safeUrl', safeUrl);
 const Standing = async (element) => {
   try {
     const data = await getStanding();
-    const context = { table: data.standings[0].table };
+    const context = { table: data.standings[0].table, defaultIcon };
     element.innerHTML = compile(standingTemplate)(context);
   } catch (error) {
 
@@ -27,7 +28,7 @@ const Standing = async (element) => {
     if (!navigator.onLine || error.message == ERROR_FAILED_TO_FETCH) {
       await InfoAsNetworkError(element);
     } else {
-      await InfoAsServerError(element)
+      await InfoAsServerError(element);
     }
     
     console.error(`${LOG_LABEL} ${error}`);

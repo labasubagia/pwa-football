@@ -15,7 +15,11 @@
         style="cursor: pointer"
         >
         {{!-- Team Logo --}}
-        <img src="{{safeUrl this.team.crestUrl}}" alt="" class="circle standing__item__image">
+        <img 
+          src="{{safeUrl this.team.crestUrl}}"
+          onerror="this.src='{{../defaultIcon}}'; this.onerror=''"
+          class="circle standing__item__image"
+          alt="Club Logo">
         
         {{!-- Information --}}
         <div>
