@@ -111,12 +111,8 @@ const config = (_env, options) => {
         theme_color: '#ffffff',
         icons: [
           {
-            src: './src/assets/icon/icon_192x192.png',
-            size: '192x192',
-          },
-          {
-            src: './src/assets/icon/icon_512x512.png',
-            size: '512x512',
+            src: './src/assets/icon/icon.png',
+            sizes: [192, 512],
           },
         ],
 

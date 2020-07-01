@@ -4,7 +4,7 @@ import { ERROR_FAILED_TO_FETCH } from '../../script/const';
 import { safeUrl } from '../../script/util';
 import { getStanding } from '../../script/api';
 import { InfoAsNetworkError, InfoAsServerError } from '../info';
-import defaultIcon from '../../assets/icon/icon_192x192.png';
+import defaultIcon from '../../assets/icon/icon.png';
 import './index.scss';
 
 // Local log

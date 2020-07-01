@@ -12,6 +12,7 @@ const urlToCache = [
   './img/undraw_choose.svg',
   './img/undraw_server_down.svg',
   './img/undraw_warning.svg',
+  './img/icon.png',
   './icon_192x192.png',
   './icon_512x512.png',
   './index.html',
@@ -90,10 +91,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   
   // Null response, use when fetch fail
-  const nullResponse = new Response(JSON.stringify(null), {
-    status: 400,
-    statusText: 'Failed to fetch',
-  });
+  const nullResponse = new Response(JSON.stringify(null));
 
   // Add to cache from server
   const addToCache = async () => {

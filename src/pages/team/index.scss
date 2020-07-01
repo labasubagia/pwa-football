@@ -18,8 +18,8 @@
 }
 
 .teamCard {
-  box-shadow: $appBoxShadow;
-  border-radius: $appCardRadius;
+  box-shadow: $appBoxShadow !important;
+  border-radius: $appCardRadius !important;
 }
 
 .teamCollapsible {

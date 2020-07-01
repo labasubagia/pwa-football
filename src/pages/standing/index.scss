@@ -12,7 +12,7 @@
     align-items: center;  
 
     &__image {
-      border-radius: 0;
+      border-radius: 0 !important;
       max-width: 40px;
       max-height: 55px;
       width: unset !important;
