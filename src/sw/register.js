@@ -17,11 +17,20 @@ const registerServiceWorker = (callback = () => {}) => {
     window.addEventListener('load', async () => {
 
       // Register Service Worker
-      // Then Run Callback
       try {
+        
+        // Register
         await navigator.serviceWorker.register('sw.js', { scope: '/' });
-        console.log(`${LOG_LABEL} Successful`);
-        callback()
+        
+        // Wait registration
+        const registration = await navigator.serviceWorker.ready;
+
+        // Success
+        if (registration) {
+          console.log(`${LOG_LABEL} Successful`);
+          callback();
+        }
+
       } catch (error) {
         console.error(`${LOG_LABEL} Failed`, error);
       }

@@ -33,6 +33,7 @@ self.addEventListener('install', event => {
     const cache = await caches.open(SW_CACHE_NAME);
     
     // // Add all url at once
+    // // To implement this, remove/comment return Promise.all() below
     // return cache.addAll(urlToCache);
     
     // Add url one by one
@@ -93,8 +94,21 @@ self.addEventListener('activate', event => {
 // Service worker fetch event
 self.addEventListener('fetch', event => {
   
-  // Null response, use when fetch fail
-  const nullResponse = new Response(JSON.stringify(null));
+  // /**
+  //  * Null response, use when fetch fail
+  //  * 
+  //  * Use: return at catch in addToCache() & checkOnCache
+  //  * 
+  //  * 
+  //  * Pro & Cons:
+  //  * 
+  //  * + This prevent warning `FetchEvent resulted in network error` 
+  //  * 
+  //  * - This not throw error in function which call fetch request to online url (eg. fetch, img.src)
+  //  * - This more difficult for error handling, because not throw error
+  //  */
+  // const nullResponse = new Response(JSON.stringify(null));
+
 
   // Add to cache from server
   const addToCache = async () => {
@@ -106,7 +120,11 @@ self.addEventListener('fetch', event => {
       return response;
     } catch (error) {
       console.error(`${LOG_LABEL} Event fetch, ${error.message}`);
-      return nullResponse;
+      throw error;
+
+      // // Null response implementation
+      // // To implement this, remove/comment throw error above
+      // return nullResponse;
     }
   };
 
@@ -118,7 +136,11 @@ self.addEventListener('fetch', event => {
       return response || fetch(event.request);
     } catch (error) {
       console.error(`${LOG_LABEL} Event fetch, ${error.message}`);
-      return nullResponse;
+      throw error;
+
+      // // Null response implementation
+      // // To implement this, remove/comment throw error above
+      // return nullResponse;
     }
   };
 
