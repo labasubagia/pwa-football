@@ -4,7 +4,76 @@
 // Partial
 @import '_variables.scss';
 
+$phoneSize: 425px;
+$tabletSize: 768px; 
+
 // Global style
 body {
   background: $appShellBackgroundColor;
+}
+
+.vector {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  &__1 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 25%;
+    @media (max-width: $tabletSize) {
+      width: 35%;
+    }
+    @media (max-width: $phoneSize) {
+      width: 45%;
+    }
+  }
+
+  &__2 {
+    position: absolute;
+    top: -2rem;
+    right: 0;
+    width: 10%;
+    @media (max-width: $tabletSize) {
+      width: 35%;
+    }
+    @media (max-width: $phoneSize) {
+      width: 20%;
+    }
+  }
+
+  &__3 {
+    position: absolute;
+    top: 65%;
+    right: 30%;
+    width: 10%;
+    @media (max-width: $tabletSize) {
+      top: 58%;
+      right: 15%;
+      width: 20%;
+    }
+    @media (max-width: $phoneSize) {
+      top: 58%;
+    }
+  }
+
+  &__4 {
+    position: absolute;
+    top: 18%;
+    left: 32%;
+    width: 5%;
+    @media (max-width: $tabletSize) {
+      top: 15%;
+      left: 18%;
+      width: 15%;
+    }
+    @media (max-width: $phoneSize) {
+      top: 22%;
+    }
+  }
+
 }

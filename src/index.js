@@ -4,6 +4,11 @@ import { APP_CONTAINER_SELECTOR } from './script/const';
 import { permissionNotification } from './script/notification'
 import './styles/main.scss';
 
+// Import vectors
+import ellipse1 from './assets/vector/ellipse1.svg';
+import ellipse2 from './assets/vector/ellipse2.svg';
+import ellipse3 from './assets/vector/ellipse3.svg';
+
 // Partial
 import Loading from './partial/loading';
 import Navigation from './partial/navigation';
@@ -15,6 +20,22 @@ const navigation = new Navigation(navigationDOM, '.sidenav');
 // Loading Partial
 const loadingDOM = document.querySelector('#progress');
 const loading = new Loading(loadingDOM);
+
+/**
+ * Init background vector
+ */
+const initVectors = () => {
+  const vector1 = document.querySelector('.vector__1');
+  const vector2 = document.querySelector('.vector__2');
+  const vector3 = document.querySelector('.vector__3');
+  const vector4 = document.querySelector('.vector__4');
+
+  vector1.src = ellipse1;
+  vector2.src = ellipse2;
+  vector3.src = ellipse3;
+  vector4.src = ellipse3;
+}
+
 
 /** 
  * Handle location hash changed
@@ -42,11 +63,13 @@ const routeHandler = async () => {
 // Init data
 const init = async () => {
 
+  initVectors();
+
   // First load
   await routeHandler();
 
   // Ask notification permission
-  permissionNotification();
+  await permissionNotification();
 
   // Hash change listener
   window.addEventListener('hashchange', async () => { 

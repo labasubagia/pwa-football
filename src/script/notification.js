@@ -69,7 +69,7 @@ const permissionNotification = async () => {
           console.log(`${LOG_LABEL} Auth key \n${uInt8ArrayToStr(subsctription.getKey('auth'))}`);
 
         } catch (error) {
-          console.error(`${LOG_LABEL} ${error}`);
+          console.error(`${LOG_LABEL} ${error.message}`);
         }
 
       }
