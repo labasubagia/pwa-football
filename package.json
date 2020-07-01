@@ -37,6 +37,7 @@
     "handlebars": "^4.7.6",
     "idb": "^5.0.4",
     "materialize-css": "^1.0.0-rc.2",
+    "web-push": "^3.4.4",
     "webpack-pwa-manifest": "^4.2.0"
   }
 }

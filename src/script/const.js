@@ -24,7 +24,11 @@ const PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD = 'Reload page';
 
 const ERROR_FAILED_TO_FETCH = 'Failed to fetch';
 
-export { 
+const PUSH_SENDERKEY = '641796850677';
+const PUSH_VAPIDKEY_PUBLIC = 'BHXvEFc_ArVKKae8km_urJQbJ4W_-9DmeiIZLQMHuQyXWkrLxkCnaxY_ls8SJuozLaXchy-H2kx8vhmmF_qhLhA';
+const PUSH_VAPIDKEY_PRIVATE = 'cH3MGTtEt2PdzzdJSz_lRsak7-9pdBcfiLKoPmXTXVc';
+
+module.exports = { 
   // Browser features
   BROWSER_SERVICE_WORKER,
   BROWSER_CACHE,
@@ -57,4 +61,9 @@ export {
 
   // Error
   ERROR_FAILED_TO_FETCH,
+
+  // Push API
+  PUSH_SENDERKEY,
+  PUSH_VAPIDKEY_PUBLIC,
+  PUSH_VAPIDKEY_PRIVATE,
 }

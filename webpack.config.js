@@ -7,6 +7,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 const buildPath = path.resolve(__dirname, 'dist');
+const { PUSH_SENDERKEY } = require('./src/script/const');
 
 // Webpack config
 const config = (_env, options) => {
@@ -109,6 +110,7 @@ const config = (_env, options) => {
         description: 'Show football standings and match',
         background_color: '#ffffff',
         theme_color: '#ffffff',
+        gcm_sender_id: PUSH_SENDERKEY,
         icons: [
           {
             src: './src/assets/icon/icon.png',

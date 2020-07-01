@@ -128,3 +128,28 @@ self.addEventListener('fetch', event => {
       : checkOnCache()
   );
 });
+
+// Push event
+self.addEventListener('push', event => {
+
+  // Read event message
+  let body = "Push doesn't have message";
+  if (event.data) 
+    body = event.data.text();
+
+  // Notification settings
+  const options = {
+    body,
+    icon: './img/icon.png',
+    vibrate: [100, 50, 50],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1,
+    },
+  };
+
+  event.waitUntil(
+    // Show notifications
+    self.registration.showNotification('Football App News', options)
+  );
+})

@@ -1,6 +1,7 @@
 import { registerServiceWorker } from './sw/register';
 import { router } from './script/router';
 import { APP_CONTAINER_SELECTOR } from './script/const';
+import { permissionNotification } from './script/notification'
 import './styles/main.scss';
 
 // Partial
@@ -43,6 +44,9 @@ const init = async () => {
 
   // First load
   await routeHandler();
+
+  // Ask notification permission
+  permissionNotification();
 
   // Hash change listener
   window.addEventListener('hashchange', async () => { 
