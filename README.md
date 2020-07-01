@@ -12,21 +12,28 @@ The information contain in this app
 
 ## How to Install
 Install node package
->`npm install`
+```sh
+$ npm install
+```
 
 ## How to Run
 Run development server
->`npm run start`
+```sh
+$ npm run start
+```
 
 Build production
->`npm run build`
+```sh
+$ npm run build
+```
 
 Build and preview production
->`npm run preview`
+```sh
+$ npm run preview
+```
 
 ## Technologies
 - [Webpack](https://webpack.js.org/)
 - [Handlebars](https://handlebarsjs.com/)
 - [Idb](https://github.com/jakearchibald/idb)
 - [Materialize CSS](https://materializecss.com/)
-
