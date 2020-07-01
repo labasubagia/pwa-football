@@ -30,9 +30,7 @@ const router = async (appSelector = APP_CONTAINER_SELECTOR) => {
 
     // Hash & params
     let [hash, param] = location.hash.split('?');
-    if (!hash) {
-      location.hash = hash = '#/';
-    }
+    hash = hash = '#/';
     param = new URLSearchParams(param);
 
     // Set App shell content
