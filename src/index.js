@@ -82,6 +82,15 @@ const init = async () => {
     await routeHandler();
     
   }, detectIt.passiveEvents ? { passive: true } : false);
+
+
+  // Enable touch scroll passive event
+  document.addEventListener('touchstart', event => {
+    
+    // Do nothing right now
+    // Maybe later I'll figure it out someting to do here
+  
+  }, detectIt.passiveEvents ? { passive: true } : false);
 }
 
 /**
