@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const buildPath = path.resolve(__dirname, 'dist');
 const { PUSH_SENDERKEY } = require('./src/script/const');
@@ -19,11 +20,10 @@ const config = (_env, options) => {
 
     entry: {
       index: './src/index.js',
-      sw: './src/sw/sw.js',
     },
   
     output: {
-      filename: '[name].js',
+      filename: '[name].[contenthash].js',
       path: buildPath,
     },
   
@@ -91,15 +91,16 @@ const config = (_env, options) => {
     },
   
     plugins: [
+      // Clean Build path (dist)
       new CleanWebpackPlugin({ root: buildPath }),
+      
+      // Minify CSS
       new MiniCssExtractPlugin(),
 
       // Index HTML
       new HtmlWebpackPlugin({
         template: './src/index.html',
         inject: true,
-        chunks: ['index', 'sw'],
-        filename: 'index.html',
         favicon: './src/assets/icon/favicon.ico',
       }),
 
@@ -111,26 +112,73 @@ const config = (_env, options) => {
         background_color: '#ffffff',
         theme_color: '#ffffff',
         gcm_sender_id: PUSH_SENDERKEY,
+        ios: true,
         icons: [
           {
             src: './src/assets/icon/icon.png',
-            sizes: [192, 512],
+            sizes: [120, 152, 167, 180, 1024],
+            destination: path.join('icons', 'ios'),
+            ios: true,
           },
+          {
+            src: './src/assets/icon/icon.png',
+            size: 1024,
+            destination: path.join('icons', 'ios'),
+            ios: 'startup',
+          },
+          {
+            src: './src/assets/icon/icon.png',
+            sizes: [36, 48, 72, 96, 144, 192, 512],
+            destination: path.join('icons', 'android'),
+          },
+          {
+            src: './src/assets/icon/maskable.png',
+            size: 1024,
+            destination: path.join('icons', 'maskable'),
+            purpose: 'maskable',
+          }
         ],
-
-        // Options
-        filename: 'manifest.json',
-        fingerprints: false,
       }),
+
+      // Workbox
+      new WorkboxPlugin.InjectManifest({
+        swSrc: './src/sw/sw.js',
+        swDest: 'sw.js',
+      }),
+
     ],
   
     optimization: {
       minimize: true,
+
+      // Split chunk
+      runtimeChunk: 'single',
+      splitChunks: {
+        chunks: 'all',
+        maxInitialRequests: Infinity,
+        minSize: 0,
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name(module) {
+              // Get the name. E.g. node_modules/packageName/not/this/part.js
+              // or node_modules/packageName
+              const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+
+              // Npm package names are URL-safe, but some servers don't like @ symbols
+              return `npm.${packageName.replace('@', '')}`;
+            }
+          },
+        },
+      },
+
+      // Minify file
       minimizer: [
         new TerserPlugin({
           cache: true,
           parallel: true,
           sourceMap: true,
+          test:/\.m?js$/,
         }),
         new OptimizeCssAssetsPlugin({}),
       ],
