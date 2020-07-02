@@ -1,3 +1,4 @@
+import detectIt from 'detect-it';
 import { skipWaiting, clientsClaim, setCacheNameDetails } from 'workbox-core';
 import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
@@ -65,4 +66,5 @@ self.addEventListener('push', event => {
     // Show notifications
     self.registration.showNotification('Football App News', options)
   );
-});
+
+}, detectIt.passiveEvents ? { passive: true } : false);

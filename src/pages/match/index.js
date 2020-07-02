@@ -1,4 +1,5 @@
 import Handlebars, { compile } from 'handlebars';
+import detectIt from 'detect-it';
 import matchTemplate from './index.hbs';
 import { InfoAsNetworkError, InfoAsServerError } from '../info';
 import { ERROR_FAILED_TO_FETCH } from '../../script/const';
@@ -90,7 +91,8 @@ const init = () => {
     matchday.addEventListener('click', () => {
       const day = matchday.dataset.matchday;
       location.hash = `#/match?matchday=${day}`;
-    })
+    }, detectIt.passiveEvents ? { passive: true } : false);
+
   });
   
 }

@@ -1,8 +1,9 @@
-import myTeamTemplate from './index.hbs';
 import Handlebars, { compile } from 'handlebars';
+import detectIt from 'detect-it';
 import { Collapsible, toast } from 'materialize-css';
 import { localDate, localTime, safeUrl } from '../../script/util';
 import { read, remove } from '../../script/db';
+import myTeamTemplate from './index.hbs';
 import { 
   DB_OBJECT_STORE_NAME, 
   PAGE_INFO_IMG_EMPTY, 
@@ -140,7 +141,7 @@ const init = async (team) => {
   const btnUnset = document.querySelector('#btnUnset');
   btnUnset.addEventListener('click', () => {
     unSelectMyTeam(team.id);
-  });
+  }, detectIt.passiveEvents ? { passive: true } : false );
 
 }
 

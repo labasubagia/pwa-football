@@ -1,3 +1,4 @@
+import detectIt from 'detect-it';
 import errorTemplate from './index.hbs';
 import { compile} from 'handlebars';
 import { timeout as waitTimeout } from '../../script/util';
@@ -61,7 +62,13 @@ const Info = async ({
     // Init btn action
     const btnActionDOM = document.querySelector('#btnAction');
     if(btnActionDOM) {
-      btnActionDOM.addEventListener('click', callback);
+      btnActionDOM.addEventListener(
+        'click', 
+        callback, 
+        detectIt.passiveEvents 
+          ? { passive: true } 
+          : false
+      );
     }
 
     // Pretend to loading

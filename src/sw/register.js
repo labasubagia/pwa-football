@@ -1,3 +1,4 @@
+import detectIt from 'detect-it';
 import { BROWSER_SERVICE_WORKER } from './../script/const';
 
 // Local Log Label
@@ -35,7 +36,7 @@ const registerServiceWorker = (callback = () => {}) => {
         console.error(`${LOG_LABEL} Failed`, error);
       }
 
-    });
+    }, detectIt.passiveEvents ? { passive: true } : false);
 
   } else {
     console.error(`${LOG_LABEL} This browser doesn't support service worker!`);

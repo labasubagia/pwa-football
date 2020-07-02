@@ -14,10 +14,10 @@ const {
 
 // This properties need to changed based on client
 const pushSubscription = {
-  endpoint: '',
+  endpoint: 'https://fcm.googleapis.com/fcm/send/eGKfplFN6O0:APA91bF39pAR41Y3DorXXmK81Xb6nWoAq_csB-aEYvEawduGJUkpWhR74JswVXX1jGMf0LWfMyzkWWGec5GGH_IBoVFn-wPiGltrdwxUTeWCBAccmmawonfhG5YgZ5FdO9ICLL0lK8ej',
   keys: {
-    p256dh: '',
-    auth: '',
+    p256dh: 'BBmMEoyQrELNUHEL35XGHzyVl+b8tJujNH2NomZXt1eTz5cTTpQwTPS2hWTWGwXhmE84luQBxPidCI7640nKCuk=',
+    auth: 'ZFCRILSGzwGTDVcxFEYTtw==',
   },
 };
 

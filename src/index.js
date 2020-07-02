@@ -1,3 +1,4 @@
+import detectIt from 'detect-it';
 import { registerServiceWorker } from './sw/register';
 import { router } from './script/router';
 import { APP_CONTAINER_SELECTOR } from './script/const';
@@ -79,7 +80,8 @@ const init = async () => {
     console.log(`${LOG_LABEL} Changed to ${location.hash}`);
   
     await routeHandler();
-  });
+    
+  }, detectIt.passiveEvents ? { passive: true } : false);
 }
 
 /**

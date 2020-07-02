@@ -1,8 +1,9 @@
-import teamTemplate from './index.hbs';
 import Handlebars, { compile } from 'handlebars';
+import detectIt from 'detect-it';
 import { Collapsible, toast } from 'materialize-css';
 import { getTeam, getTeamMatches } from '../../script/api';
 import { insert, read, remove } from '../../script/db';
+import teamTemplate from './index.hbs';
 import { DB_OBJECT_STORE_NAME, ERROR_FAILED_TO_FETCH } from '../../script/const';
 import { localDate, localTime, safeUrl } from '../../script/util';
 import { InfoAsNetworkError, InfoAsServerError } from '../info';
@@ -145,7 +146,7 @@ const init = async (team) => {
     const btnSetFavorite = document.querySelector('#btnSetFavorite');
     btnSetFavorite.addEventListener('click', () => {
       setFavorite(team);
-    });
+    }, detectIt.passiveEvents ? { passive: true } : false);
   }
 
   // Set UI for favorite condition
