@@ -40,3 +40,4 @@ $ npm run preview
 - [Handlebars](https://handlebarsjs.com/)
 - [Idb](https://github.com/jakearchibald/idb)
 - [Materialize CSS](https://materializecss.com/)
+- [Workbox](https://developers.google.com/web/tools/workbox)
