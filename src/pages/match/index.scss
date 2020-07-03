@@ -2,7 +2,7 @@
 
 .matchday {
   padding: .5rem;
-  margin: .5rem 0;
+  margin: .5rem;
   border-radius: 2px;
   box-shadow: $appBoxShadow;
 }
@@ -32,4 +32,9 @@
     margin-top: 1rem;
     display: inline-block;
   }
+}
+
+// Remove card x axis padding
+.row .col {
+  padding: 0;
 }
