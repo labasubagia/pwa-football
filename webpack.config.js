@@ -22,8 +22,9 @@ const config = (_env, options) => {
       index: './src/index.js',
     },
   
+    // Output to script folder in dist/
     output: {
-      filename: '[name].[contenthash].js',
+      filename: 'script/[name].[contenthash].js',
       path: buildPath,
     },
   
@@ -95,7 +96,10 @@ const config = (_env, options) => {
       new CleanWebpackPlugin({ root: buildPath }),
       
       // Minify CSS
-      new MiniCssExtractPlugin(),
+      // Output in css folder in dist/
+      new MiniCssExtractPlugin({
+        filename: 'css/[name].[contenthash].css',
+      }),
 
       // Index HTML
       new HtmlWebpackPlugin({
@@ -177,8 +181,18 @@ const config = (_env, options) => {
         new TerserPlugin({
           cache: true,
           parallel: true,
-          sourceMap: true,
+          sourceMap: isProd,
           test:/\.m?js$/,
+          
+          // Remove comments
+          terserOptions: {
+            output: {
+              comments: false,
+            },
+          },
+
+          // Remove licencse
+          extractComments: false,
         }),
         new OptimizeCssAssetsPlugin({}),
       ],

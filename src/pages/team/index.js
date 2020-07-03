@@ -6,7 +6,6 @@ import { insert, read, remove } from '../../script/db';
 import teamTemplate from './index.hbs';
 import { DB_OBJECT_STORE_NAME, ERROR_FAILED_TO_FETCH } from '../../script/const';
 import { localDate, localTime, safeUrl } from '../../script/util';
-import { InfoAsNetworkError, InfoAsServerError } from '../info';
 import './index.scss';
 
 // Local label
@@ -55,8 +54,10 @@ const Team = async (element, id) => {
 
     // Show info error
     if (!navigator.onLine || error.message == ERROR_FAILED_TO_FETCH) {
+      const { InfoAsNetworkError } = await import(/* webpackChunkName: "info_error_network" */ '../info');
       await InfoAsNetworkError(element);
     } else {
+      const { InfoAsServerError } = await import(/* webpackChunkName: "info_error_server" */ '../info');
       await InfoAsServerError(element);
     }
     
