@@ -9,12 +9,12 @@
       <br>
       <img class="teamBrand__logo" alt="logo" src="{{safeUrl team.crestUrl}}"/>
       <br>
-      <p class="center-align grey-text darken-4">{{team.address}}<br>{{team.area.name}}</p>
+      <p class="center-align grey-text text-darken-2">{{team.address}}<br>{{team.area.name}}</p>
 
       {{!-- Click to unset --}}
       <button 
         id="btnUnset"
-        class="red lighten-2 z-depth-0 waves-effect waves-light btn teamAddAction" 
+        class="red z-depth-0 waves-effect waves-light btn teamAddAction" 
         >
         Unselect My Team
       </button>
@@ -29,7 +29,7 @@
           <div class="card-content black-text">
             <span class="card-title">Basic Info</span>
             <hr class="teamHorizontalLine">
-            <ul class="collapsible teamCollapsible z-depth-0 grey-text darken-4">
+            <ul class="collapsible teamCollapsible z-depth-0 grey-text text-darken-2">
               
               {{!-- Stadium --}}
               <li>
@@ -76,10 +76,10 @@
           <div class="card-content black-text">
             <span class="card-title">Competitions</span>
             <hr class="teamHorizontalLine">
-            <p class="grey-text darken-4">
+            <p class="grey-text text-darken-2">
               <ul>
                 {{#each team.activeCompetitions}}
-                  <li class="grey-text darken-4">- {{this.name}}</li>
+                  <li class="grey-text text-darken-2">- {{this.name}}</li>
                 {{/each}}
               </ul>
             </p>
@@ -93,7 +93,7 @@
           <div class="card-content black-text">
             <span class="card-title">Next Match</span>
             <hr class="teamHorizontalLine">
-            <ul class="collapsible teamCollapsible z-depth-0 grey-text darken-4">
+            <ul class="collapsible teamCollapsible z-depth-0 grey-text text-darken-2">
               {{#each team.matches}}
                 <li>
                   <div class="collapsible-header teamCollapsible__header">{{this.vsTeam}}</div>
@@ -119,13 +119,13 @@
           <div class="card-content black-text">
             <span class="card-title">Squad</span>
             <hr class="teamHorizontalLine">
-            <ul class="collapsible teamCollapsible z-depth-0 grey-text darken-4">
+            <ul class="collapsible teamCollapsible z-depth-0 grey-text text-darken-2">
               {{#each team.squad}}
                 <li>
                   <div class="collapsible-header teamCollapsible__header">
                     {{this.name}}
                     <span
-                      class="{{this.positionColor}} lighten-2 badge white-text"
+                      class="{{this.positionColor}} badge white-text"
                       style="border-radius: 2px"
                       >
                       {{this.positionShortName}}

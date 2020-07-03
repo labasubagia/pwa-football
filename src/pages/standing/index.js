@@ -3,7 +3,6 @@ import standingTemplate from './index.hbs';
 import { ERROR_FAILED_TO_FETCH } from '../../script/const';
 import { safeUrl } from '../../script/util';
 import { getStanding } from '../../script/api';
-import { InfoAsNetworkError, InfoAsServerError } from '../info';
 import defaultIcon from '../../assets/icon/icon.png';
 import './index.scss';
 
@@ -26,8 +25,10 @@ const Standing = async (element) => {
 
     // Show info error
     if (!navigator.onLine || error.message == ERROR_FAILED_TO_FETCH) {
+      const { InfoAsNetworkError } = await import(/* webpackChunkName: "info_error_network" */ '../info');
       await InfoAsNetworkError(element);
     } else {
+      const { InfoAsServerError } = await import(/* webpackChunkName: "info_error_server" */ '../info');
       await InfoAsServerError(element);
     }
     

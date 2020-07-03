@@ -1,6 +1,6 @@
 import Handlebars, { compile } from 'handlebars';
+import detectIt from 'detect-it';
 import matchTemplate from './index.hbs';
-import { InfoAsNetworkError, InfoAsServerError } from '../info';
 import { ERROR_FAILED_TO_FETCH } from '../../script/const';
 import { getCompetitionMatches, getCompetitionInfo } from '../../script/api';
 import { localDate, localTime } from '../../script/util';
@@ -67,9 +67,11 @@ const Match = async (element, matchday = null) => {
   } catch (error) {
 
     // Network error
-    if (!navigator.onLine || ERROR_FAILED_TO_FETCH) {
+    if (!navigator.onLine || error.message == ERROR_FAILED_TO_FETCH) {
+      const { InfoAsNetworkError } = await import(/* webpackChunkName: "info_error_network" */ '../info');
       await InfoAsNetworkError(element);
     } else {
+      const { InfoAsServerError } = await import(/* webpackChunkName: "info_error_server" */ '../info');
       await InfoAsServerError(element);
     }
 
@@ -90,7 +92,8 @@ const init = () => {
     matchday.addEventListener('click', () => {
       const day = matchday.dataset.matchday;
       location.hash = `#/match?matchday=${day}`;
-    })
+    }, detectIt.passiveEvents ? { passive: true } : false);
+
   });
   
 }

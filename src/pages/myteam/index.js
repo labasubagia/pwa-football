@@ -1,15 +1,15 @@
-import myTeamTemplate from './index.hbs';
 import Handlebars, { compile } from 'handlebars';
+import detectIt from 'detect-it';
 import { Collapsible, toast } from 'materialize-css';
 import { localDate, localTime, safeUrl } from '../../script/util';
 import { read, remove } from '../../script/db';
+import myTeamTemplate from './index.hbs';
 import { 
   DB_OBJECT_STORE_NAME, 
   PAGE_INFO_IMG_EMPTY, 
   PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD 
 } from '../../script/const';
 import { refreshAppContent } from '../../index';
-import { Info } from '../info';
 import './index.scss';
 
 // Local log
@@ -45,6 +45,7 @@ const MyTeam = async (element) => {
       }
   
       // Empty Info
+      const { Info } = await import(/* webpackChunkName: "info" */ '../info');
       await Info({
         element, 
         image: PAGE_INFO_IMG_EMPTY, 
@@ -91,6 +92,7 @@ const MyTeam = async (element) => {
   } catch (error) {
 
     // Unknown error
+    const { Info } = await import(/* webpackChunkName: "info" */ '../info');
     await Info({
       element,  
       title: 'Something Wrong', 
@@ -140,7 +142,7 @@ const init = async (team) => {
   const btnUnset = document.querySelector('#btnUnset');
   btnUnset.addEventListener('click', () => {
     unSelectMyTeam(team.id);
-  });
+  }, detectIt.passiveEvents ? { passive: true } : false );
 
 }
 

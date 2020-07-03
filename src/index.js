@@ -1,3 +1,4 @@
+import detectIt from 'detect-it';
 import { registerServiceWorker } from './sw/register';
 import { router } from './script/router';
 import { APP_CONTAINER_SELECTOR } from './script/const';
@@ -79,7 +80,17 @@ const init = async () => {
     console.log(`${LOG_LABEL} Changed to ${location.hash}`);
   
     await routeHandler();
-  });
+    
+  }, detectIt.passiveEvents ? { passive: true } : false);
+
+
+  // Enable touch scroll passive event
+  document.addEventListener('touchstart', event => {
+    
+    // Do nothing right now
+    // Maybe later I'll figure it out someting to do here
+  
+  }, detectIt.passiveEvents ? { passive: true } : false);
 }
 
 /**

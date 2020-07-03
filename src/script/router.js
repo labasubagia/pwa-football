@@ -1,12 +1,5 @@
 import { APP_CONTAINER_SELECTOR } from './const';
 
-// Import Routes
-import Standing from "../pages/standing";
-import Team from '../pages/team';
-import MyTeam from '../pages/myteam';
-import Match from '../pages/match';
-import { Info } from '../pages/info';
-
 // Local Log
 const LOG_LABEL = '[Router]'; 
 
@@ -39,12 +32,14 @@ const router = async (appSelector = APP_CONTAINER_SELECTOR) => {
       // Home show standing page
       case '#/':
         pageTitle = 'Standing';
+        const { default: Standing } = await import(/* webpackChunkName: "standing" */ '../pages/standing');
         await Standing(app);
         break;
 
       // Team detail
       case '#/team':
         pageTitle = 'Team';
+        const { default: Team } = await import(/* webpackChunkName: "team" */ '../pages/team');
         const id = param.get('id');
         await Team(app, id);
         break;
@@ -52,12 +47,14 @@ const router = async (appSelector = APP_CONTAINER_SELECTOR) => {
       // My Team
       case '#/myteam':
         pageTitle = 'My Team';
+        const { default: MyTeam } = await import(/* webpackChunkName: "myteam" */ '../pages/myteam');
         await MyTeam(app);
         break;
 
       // Match
       case '#/match':
         pageTitle = 'Matches';
+        const { default: Match } = await import(/* webpackChunkName: "match" */ '../pages/match'); 
         const matchday = param.get('matchday') || null;
         await Match(app, matchday);
         break;
@@ -66,6 +63,7 @@ const router = async (appSelector = APP_CONTAINER_SELECTOR) => {
       default:
         const page = hash.substr(2);
         pageTitle = '404';
+        const { Info } = await import(/* webpackChunkName: "info" */ '../pages/info');
         await Info({
           element: app, 
           title: pageTitle, 

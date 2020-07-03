@@ -12,6 +12,11 @@ body {
   background: $appShellBackgroundColor;
 }
 
+header {
+  box-shadow: $appBoxShadow;
+}
+
+// Background Vector
 .vector {
   position: fixed;
   z-index: -1;

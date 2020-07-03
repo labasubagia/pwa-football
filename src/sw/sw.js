@@ -1,158 +1,47 @@
-import { safeUrl } from '../script/util';
+import detectIt from 'detect-it';
+import { skipWaiting, clientsClaim, setCacheNameDetails } from 'workbox-core';
+import { precacheAndRoute } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
+import { StaleWhileRevalidate } from 'workbox-strategies';
+import { ExpirationPlugin } from 'workbox-expiration';
 import { SW_CACHE_NAME, API_BASE_URL } from '../script/const';
+import icon from '../assets/icon/icon.png';
 
-// Local Label
-const LOG_LABEL = '[Service Worker]';
+// Use newest service worker
+skipWaiting();
 
-// Resources need to be offline
-// NOTE: When use native service worker please match filename in webpack config
-const urlToCache = [
-  './',
-  './favicon.ico',
-  './img/undraw_choose.svg',
-  './img/undraw_server_down.svg',
-  './img/undraw_warning.svg',
-  './img/ellipse1.svg',
-  './img/ellipse2.svg',
-  './img/ellipse3.svg',
-  './img/icon.png',
-  './icon_192x192.png',
-  './icon_512x512.png',
-  './index.html',
-  './index.css',
-  './index.js',
-  './manifest.json',
-];
+// Use service worker at first load
+clientsClaim();
 
-
-// Service worker install event
-self.addEventListener('install', event => {
-
-  // Cache files all
-  const preCache = async () => {
-    const cache = await caches.open(SW_CACHE_NAME);
-    
-    // // Add all url at once
-    // // To implement this, remove/comment return Promise.all() below
-    // return cache.addAll(urlToCache);
-    
-    // Add url one by one
-    // So easier to know broken url
-    return Promise.all(
-      urlToCache.map(async url => {
-        try {
-          return cache.add(url);
-        
-        } catch (error) {
-          console.error(`${LOG_LABEL} Install Cache failed ${url}: ${error.message}`);
-
-          // Return promise undefined
-          // Same as cache.add()
-          return Promise.resolve(undefined);
-        }
-      })
-    );
-  } 
-
-  // Run precache
-  event.waitUntil(preCache());
-  console.log(`${LOG_LABEL} Install`);
-  
-  // Always use newest version of service worker
-  self.skipWaiting();
-
+// Set precache and runtime cache name
+setCacheNameDetails({
+  prefix: SW_CACHE_NAME,
+  suffix: 'v1',
+  precache: 'precache',
+  runtime: 'runtime',
 });
 
-
-// Service worker activate event
-self.addEventListener('activate', event => {
-
-  // Delete unused cache
-  const deleteOtherCache = async () => {
-    const cacheNames = await caches.keys();
-    return Promise.all(
-      cacheNames.map(cacheName => {
-        if (cacheName != SW_CACHE_NAME) {
-          console.log(`${LOG_LABEL} Delete cache ${cacheName}`);
-          return caches.delete(cacheName);
-        }
-      })
-    );
-  }
-
-  // Wait activate process
-  console.log(`${LOG_LABEL} Activate`);
-  event.waitUntil(Promise.all([
-    deleteOtherCache(),
-
-    // Use service worker at first load
-    clients.claim(),
-  ]));
+// Cache webpack
+precacheAndRoute(self.__WB_MANIFEST, {
+  // Ignore search url
+  ignoreURLParametersMatching: [/.*/], 
 });
 
+// Make API Offline
+registerRoute(
+  new RegExp(API_BASE_URL),
+  new StaleWhileRevalidate({
+    cacheName: 'api',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 50, // Entries count 
+        maxAgeSeconds: 60 * 60 * 24, // 1 day
+        purgeOnQuotaError: true, // Clear if cache exceed quota
+      }),
+    ],
+  })
+);
 
-// Service worker fetch event
-self.addEventListener('fetch', event => {
-  
-  // /**
-  //  * Null response, use when fetch fail
-  //  * 
-  //  * Use: return at catch in addToCache() & checkOnCache
-  //  * 
-  //  * 
-  //  * Pro & Cons:
-  //  * 
-  //  * + This prevent warning `FetchEvent resulted in network error` 
-  //  * 
-  //  * - This not throw error in function which call fetch request to online url (eg. fetch, img.src)
-  //  * - This more difficult for error handling, because not throw error
-  //  */
-  // const nullResponse = new Response(JSON.stringify(null));
-
-
-  // Add to cache from server
-  const addToCache = async () => {
-    try {
-      const cache = await caches.open(SW_CACHE_NAME);
-      const response = await fetch(event.request);
-      cache.put(event.request.url, response.clone());
-      console.log(`${LOG_LABEL} Add to cache ${event.request.url}`);
-      return response;
-    } catch (error) {
-      console.error(`${LOG_LABEL} Event fetch, ${error.message}`);
-      throw error;
-
-      // // Null response implementation
-      // // To implement this, remove/comment throw error above
-      // return nullResponse;
-    }
-  };
-
-  // Check in cache
-  // Or fetch request
-  const checkOnCache = async () => {
-    try {
-      const response = await caches.match(event.request, { ignoreSearch: true });
-      return response || fetch(event.request);
-    } catch (error) {
-      console.error(`${LOG_LABEL} Event fetch, ${error.message}`);
-      throw error;
-
-      // // Null response implementation
-      // // To implement this, remove/comment throw error above
-      // return nullResponse;
-    }
-  };
-
-  // Service worker fetch event Respond
-  const url = safeUrl(event.request.url);
-  event.respondWith(
-    url.includes(API_BASE_URL)
-    || url.includes(location.origin)
-      ? addToCache()
-      : checkOnCache()
-  );
-});
 
 // Push event
 self.addEventListener('push', event => {
@@ -165,7 +54,7 @@ self.addEventListener('push', event => {
   // Notification settings
   const options = {
     body,
-    icon: './img/icon.png',
+    icon,
     vibrate: [100, 50, 50],
     data: {
       dateOfArrival: Date.now(),
@@ -177,4 +66,5 @@ self.addEventListener('push', event => {
     // Show notifications
     self.registration.showNotification('Football App News', options)
   );
-})
+
+}, detectIt.passiveEvents ? { passive: true } : false);

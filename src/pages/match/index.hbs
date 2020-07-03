@@ -16,9 +16,9 @@
         <div 
           class="
             {{#if_eq this ../matchday}} 
-              blue lighten-2 white-text
+              blue white-text
             {{else}}
-              white grey-text 
+              white grey-text text-darken-1
             {{/if_eq}}
             center-align 
             matchday
@@ -60,7 +60,7 @@
               <span>{{this.homeTeam.name}}</span>  
               <span class="
                 {{#if_eq this.score.winner 'HOME_TEAM'}} 
-                  blue-text text-lighten-2  
+                  blue-text text-darken-2  
                 {{/if_eq}}
                 ">
                 {{this.score.fullTime.homeTeam}}
@@ -72,7 +72,7 @@
               <span>{{this.awayTeam.name}}</span>
               <span class="
                 {{#if_eq this.score.winner 'AWAY_TEAM'}} 
-                  blue-text text-lighten-2 
+                  blue-text text-darken-2 
                 {{/if_eq}}
                 ">
                 {{this.score.fullTime.awayTeam}} 
@@ -83,13 +83,13 @@
           <hr class="match__hr">
           
           {{!-- Time --}}
-          <span class="grey-text">
+          <span class="grey-text text-darken-1">
             Date {{localDate this.utcDate}}<br>
             Time {{localTime this.utcDate}}
           </span><br>
 
           {{!-- Match Status --}}
-          <div class="{{this.statusColor}} lighten-2 center-align match__status">
+          <div class="{{this.statusColor}} center-align match__status">
             {{this.statusName}}
           </div>
 

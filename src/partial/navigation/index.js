@@ -1,6 +1,7 @@
-import navigationTemplate from './index.hbs';
+import detectIt from 'detect-it';
 import { Sidenav } from "materialize-css";
 import { compile } from 'handlebars';
+import navigationTemplate from './index.hbs';
 import './index.scss';
 
 // Local log
@@ -40,7 +41,8 @@ class Navigation {
 
         // Sidenav instance
         this.instance = new Sidenav.getInstance(elems[0]);
-      })
+      
+      }, detectIt.passiveEvents ? { passive: true } : false );
 
     } catch (error) {
       console.error(`${LOG_LABEL} Cannot load partial ${error}`);
