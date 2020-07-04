@@ -65,7 +65,7 @@ const getFromCache = async (url, isOnlineUpdate = true) => {
 /**
  * Fetch GET Request
  * @param {String} paramUrl
- * @param {String} queryParams
+ * @param {Object} queryParams
  * @return {Promise}
  */
 const getRequest = async (paramUrl, queryParams = null) => {
@@ -140,7 +140,7 @@ const getTeam = async (id) => {
 /**
  * Get matches of a team
  * @param {String, Int} id Team ID
- * @param {String} queryParams url params
+ * @param {Object} queryParams url params
  * @return {Promise}
  */
 const getTeamMatches = async (id, queryParams = null) => {
@@ -150,7 +150,7 @@ const getTeamMatches = async (id, queryParams = null) => {
 
 /**
  * Get competition matches
- * @param {String} queryParams url params
+ * @param {Object} queryParams url params
  * @return {Promise}
  */
 const getCompetitionMatches = async (queryParams = null) => {
@@ -160,7 +160,7 @@ const getCompetitionMatches = async (queryParams = null) => {
 
 /**
  * Get competition info
- * @param {String} queryParams url params
+ * @param {Object} queryParams url params
  * @return {Promise}
  */
 const getCompetitionInfo = async (queryParams = null) => {
