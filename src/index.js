@@ -72,7 +72,7 @@ const init = async () => {
     async () => {
       // Log changed
       const LOG_LABEL = '[Page Hash]';
-      console.log(`${LOG_LABEL} Changed to ${location.hash}`);
+      console.log(`${LOG_LABEL} Changed to ${window.location.hash}`);
 
       await routeHandler();
     },
@@ -82,7 +82,7 @@ const init = async () => {
   // Enable touch scroll passive event
   document.addEventListener(
     'touchstart',
-    (event) => {
+    () => {
       // Do nothing right now
       // Maybe later I'll figure it out something to do here
     },
@@ -102,4 +102,5 @@ const refreshAppContent = () => {
 // Register service worker
 registerServiceWorker(init);
 
+// eslint-disable-next-line import/prefer-default-export
 export { refreshAppContent };

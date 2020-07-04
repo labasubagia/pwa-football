@@ -41,6 +41,7 @@ class Navigation {
           Sidenav.init(elements);
 
           // Sidenav instance
+          // eslint-disable-next-line new-cap
           this.instance = new Sidenav.getInstance(elements[0]);
         },
         detectIt.passiveEvents ? { passive: true } : false,
@@ -54,7 +55,7 @@ class Navigation {
    * Close sidenav
    */
   closeSidenav() {
-    this.instance && this.instance.close();
+    if (this.instance) this.instance.close();
   }
 }
 

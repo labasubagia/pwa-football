@@ -22,6 +22,7 @@ setCacheNameDetails({
 });
 
 // Cache webpack
+// eslint-disable-next-line
 precacheAndRoute(self.__WB_MANIFEST, {
   // Ignore search url
   ignoreURLParametersMatching: [/.*/],
@@ -43,6 +44,7 @@ registerRoute(
 );
 
 // Push event
+// eslint-disable-next-line no-restricted-globals
 self.addEventListener(
   'push',
   (event) => {
@@ -63,6 +65,7 @@ self.addEventListener(
 
     event.waitUntil(
       // Show notifications
+      // eslint-disable-next-line no-restricted-globals
       self.registration.showNotification('Football App News', options),
     );
   },

@@ -1,6 +1,6 @@
 import detectIt from 'detect-it';
-import errorTemplate from './index.hbs';
 import { compile } from 'handlebars';
+import errorTemplate from './index.hbs';
 import { timeout as waitTimeout } from '../../script/util';
 import {
   PAGE_INFO_IMG_SERVER_ERROR,
@@ -12,17 +12,18 @@ import {
   PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE,
   PAGE_INFO_CONTENT_SERVER_ERROR_TITLE,
   PAGE_INFO_CONTENT_SERVER_ERROR_MESSAGE,
+  APP_CONTAINER_SELECTOR,
 } from '../../script/const';
 import { refreshAppContent } from '../../index';
 import './index.scss';
-
-// Local log
-const LOG_LABEL = '[Info Page]';
 
 // Images
 import choose from '../../assets/img/undraw_choose.svg';
 import serverDown from '../../assets/img/undraw_server_down.svg';
 import warning from '../../assets/img/undraw_warning.svg';
+
+// Local log
+const LOG_LABEL = '[Info Page]';
 
 // Image object
 // Select based on key
@@ -34,7 +35,7 @@ const images = {
 
 /**
  * Load Info page
- * @param {Element} element
+ * @param {String} appSelector parent selector
  * @param {String} type
  * @param {String} title
  * @param {String} message
@@ -42,19 +43,22 @@ const images = {
  * @param {Int} timeout Millisecond
  */
 const Info = async ({
-  element,
+  appSelector = APP_CONTAINER_SELECTOR,
   image = PAGE_INFO_IMG_WARNING,
   title,
   message,
-  timeout,
+  timeout = 0,
   actionText = PAGE_INFO_CONTENT_ACTION_TEXT_BACK,
   callback = () => {
     // Default back to previous page
     console.log(`${LOG_LABEL} Back to previous page`);
-    history.back();
+    window.history.back();
   },
 }) => {
   try {
+    // Get parent element
+    const element = document.querySelector(appSelector);
+
     // Compile template
     element.innerHTML = compile(errorTemplate)({
       image: images[image],
@@ -74,7 +78,7 @@ const Info = async ({
     }
 
     // Pretend to loading
-    timeout && (await waitTimeout(timeout));
+    if (timeout) await waitTimeout(timeout);
   } catch (error) {
     console.error(`${LOG_LABEL} Failed to load ${error}`);
   }

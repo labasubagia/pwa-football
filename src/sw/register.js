@@ -1,5 +1,5 @@
 import detectIt from 'detect-it';
-import { BROWSER_SERVICE_WORKER } from './../script/const';
+import { BROWSER_SERVICE_WORKER } from '../script/const';
 
 // Local Log Label
 const LOG_LABEL = '[Register Service Worker]';
@@ -41,4 +41,5 @@ const registerServiceWorker = (callback = () => {}) => {
   }
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export { registerServiceWorker };

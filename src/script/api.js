@@ -20,60 +20,57 @@ const headers = {
  * @param {Boolean} isOnlineUpdate
  */
 const getFromCache = async (url, isOnlineUpdate = true) => {
-  try {
-    // Check url in cache
-    const cacheResponse = await caches.match(url);
+  // Check url in cache
+  const cacheResponse = await caches.match(url);
 
-    // Cache data is exist
-    if (cacheResponse) {
-      // Assign cache data
-      const cacheData = await cacheResponse.clone().json();
+  // Cache data is exist
+  if (cacheResponse) {
+    // Assign cache data
+    const cacheData = await cacheResponse.clone().json();
 
-      // Browser is online
-      if (navigator.onLine && isOnlineUpdate) {
-        console.log(`${LOG_LABEL} Check data to ${url}`);
+    // Browser is online
+    if (navigator.onLine && isOnlineUpdate) {
+      console.log(`${LOG_LABEL} Check data to ${url}`);
 
-        // When connection slow
-        // Abort fetch
-        const controller = new AbortController();
-        const { signal } = controller;
+      // When connection slow
+      // Abort fetch
+      const controller = new AbortController();
+      const { signal } = controller;
 
-        // Throw AbortError when time is up
-        setTimeout(() => controller.abort(), 5000);
+      // Throw AbortError when time is up
+      setTimeout(() => controller.abort(), 5000);
 
-        // Get server data
-        const serverResponse = await fetch(url, { headers, signal });
-        const serverData = await serverResponse.clone().json();
+      // Get server data
+      const serverResponse = await fetch(url, { headers, signal });
+      const serverData = await serverResponse.clone().json();
 
-        console.log(`${LOG_LABEL} Check data retrieved from ${url}`);
+      console.log(`${LOG_LABEL} Check data retrieved from ${url}`);
 
-        // Compare server & cache data
-        // Use server data when data not same
-        if (JSON.stringify(cacheData) != JSON.stringify(serverData)) {
-          console.log(`${LOG_LABEL} Update from ${url}`);
-          return serverData;
-        }
+      // Compare server & cache data
+      // Use server data when data not same
+      if (JSON.stringify(cacheData) !== JSON.stringify(serverData)) {
+        console.log(`${LOG_LABEL} Update from ${url}`);
+        return serverData;
       }
-
-      // Load from cache
-      console.log(`${LOG_LABEL} Local ${url}`);
-      return cacheData;
     }
 
-    return null;
-  } catch (error) {
-    // Throw error to scope that is function called
-    throw error;
+    // Load from cache
+    console.log(`${LOG_LABEL} Local ${url}`);
+    return cacheData;
   }
+
+  return null;
 };
 
 /**
  * Fetch GET Request
- * @param {String} url
+ * @param {String} paramUrl
  * @param {String} queryParams
  * @return {Promise}
  */
-const getRequest = async (url, queryParams = null) => {
+const getRequest = async (paramUrl, queryParams = null) => {
+  let url = paramUrl;
+
   // Add query params to url
   if (queryParams) {
     url = `${url}?${new URLSearchParams(queryParams)}`;
@@ -88,7 +85,7 @@ const getRequest = async (url, queryParams = null) => {
     if (BROWSER_CACHE in window) {
       // Get data from cache
       // If online, try to request online data
-      let cacheFirstData = await getFromCache(url);
+      const cacheFirstData = await getFromCache(url);
       if (cacheFirstData) return cacheFirstData;
     }
 

@@ -8,6 +8,7 @@ import {
   DB_OBJECT_STORE_NAME,
   PAGE_INFO_IMG_EMPTY,
   PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
+  APP_CONTAINER_SELECTOR,
 } from '../../script/const';
 import { refreshAppContent } from '../../index';
 import './index.scss';
@@ -16,11 +17,57 @@ import './index.scss';
 const LOG_LABEL = '[MyTeam Page]';
 
 /**
- * MyTeam component
- * @param {Element} element
+ * Get favorite team
  */
-const MyTeam = async (element) => {
+const getMyTeam = async () => {
+  const teams = await read({ objectStore: DB_OBJECT_STORE_NAME });
+  return teams.length ? teams[0] : null;
+};
+
+/**
+ * Unselect favorite team
+ * @param {Int} keyPath
+ */
+const unSelectMyTeam = async (keyPath) => {
   try {
+    await remove({ objectStore: DB_OBJECT_STORE_NAME, keyPath });
+    refreshAppContent();
+    toast({ html: 'Unselect team succeed' });
+  } catch (error) {
+    toast({ html: 'Unselect team failed' });
+    console.error(`${LOG_LABEL} Unselect failed ${error.message}`);
+  }
+};
+
+/**
+ * Init
+ * @param {Object} team
+ */
+const init = async (team) => {
+  // Init collapsible
+  const elements = document.querySelectorAll('.collapsible');
+  Collapsible.init(elements);
+
+  // Unset action
+  const btnUnset = document.querySelector('#btnUnset');
+  btnUnset.addEventListener(
+    'click',
+    () => {
+      unSelectMyTeam(team.id);
+    },
+    detectIt.passiveEvents ? { passive: true } : false,
+  );
+};
+
+/**
+ * MyTeam component
+ * @param {String} appSelector parent element selector
+ */
+const MyTeam = async (appSelector = APP_CONTAINER_SELECTOR) => {
+  try {
+    // Get parent element
+    const element = document.querySelector(appSelector);
+
     // Handlebars Helpers
     [
       { name: 'localDate', method: localDate },
@@ -36,13 +83,13 @@ const MyTeam = async (element) => {
     if (!team) {
       // Info callback
       const callback = () => {
-        location.hash = '#/';
+        window.location.hash = '#/';
       };
 
       // Empty Info
       const { Info } = await import(/* webpackChunkName: "info" */ '../info');
       await Info({
-        element,
+        appSelector,
         image: PAGE_INFO_IMG_EMPTY,
         title: 'Favorite Empty',
         message: 'Please select a team from standing page',
@@ -86,7 +133,7 @@ const MyTeam = async (element) => {
     // Unknown error
     const { Info } = await import(/* webpackChunkName: "info" */ '../info');
     await Info({
-      element,
+      appSelector,
       title: 'Something Wrong',
       message: 'Please check this page later',
       actionText: `Or ${PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD}`,
@@ -95,49 +142,6 @@ const MyTeam = async (element) => {
 
     console.error(`${LOG_LABEL} ${error}`);
   }
-};
-
-/**
- * Get favorite team
- */
-const getMyTeam = async () => {
-  const teams = await read({ objectStore: DB_OBJECT_STORE_NAME });
-  return teams.length ? teams[0] : null;
-};
-
-/**
- * Unselect favorite team
- * @param {Int} keyPath
- */
-const unSelectMyTeam = async (keyPath) => {
-  try {
-    await remove({ objectStore: DB_OBJECT_STORE_NAME, keyPath });
-    refreshAppContent();
-    toast({ html: 'Unselect team succeed' });
-  } catch (error) {
-    toast({ html: 'Unselect team failed' });
-    console.error(`${LOG_LABEL} Unselect failed ${error.message}`);
-  }
-};
-
-/**
- * Init
- * @param {Object} team
- */
-const init = async (team) => {
-  // Init collapsible
-  const elements = document.querySelectorAll('.collapsible');
-  Collapsible.init(elements);
-
-  // Unset action
-  const btnUnset = document.querySelector('#btnUnset');
-  btnUnset.addEventListener(
-    'click',
-    () => {
-      unSelectMyTeam(team.id);
-    },
-    detectIt.passiveEvents ? { passive: true } : false,
-  );
 };
 
 export default MyTeam;

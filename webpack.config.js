@@ -12,7 +12,7 @@ const { PUSH_SENDER_KEY } = require('./src/script/const');
 
 // Webpack config
 const config = (_env, options) => {
-  const isProd = options.mode == 'production';
+  const isProd = options.mode === 'production';
 
   // Base config
   const base = {
@@ -51,13 +51,16 @@ const config = (_env, options) => {
         {
           test: /\.m?js$/,
           exclude: /(node_modules)/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-              plugins: [['@babel/transform-runtime']],
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+                plugins: [['@babel/transform-runtime']],
+              },
             },
-          },
+            'eslint-loader',
+          ],
         },
 
         // CSS

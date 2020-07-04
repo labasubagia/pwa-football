@@ -1,7 +1,10 @@
 import Handlebars, { compile } from 'handlebars';
 import detectIt from 'detect-it';
 import matchTemplate from './index.hbs';
-import { ERROR_FAILED_TO_FETCH } from '../../script/const';
+import {
+  ERROR_FAILED_TO_FETCH,
+  APP_CONTAINER_SELECTOR,
+} from '../../script/const';
 import { getCompetitionMatches, getCompetitionInfo } from '../../script/api';
 import { localDate, localTime } from '../../script/util';
 import './index.scss';
@@ -10,12 +13,48 @@ import './index.scss';
 const LOG_LABEL = '[Match Page]';
 
 /**
- * Show Matches page
- * @param {Element} element
- * @param {Int} matchday
+ * Manipulate DOM
  */
-const Match = async (element, matchday = null) => {
+const init = () => {
+  // Matchday selector
+  const matchdays = document.querySelectorAll('.matchday');
+  matchdays.forEach((matchday) => {
+    // Onclick, change hash matchday
+    matchday.addEventListener(
+      'click',
+      () => {
+        const day = matchday.dataset.matchday;
+        window.location.hash = `#/match?matchday=${day}`;
+      },
+      detectIt.passiveEvents ? { passive: true } : false,
+    );
+  });
+};
+
+/**
+ * Get default match day
+ * @return {Int}
+ */
+const getDefaultMatchDay = async () => {
+  const info = await getCompetitionInfo();
+  return info.currentSeason.currentMatchday;
+};
+
+/**
+ * Show Matches page
+ * @param {String} appSelector parent element selector
+ * @param {Int} paramMatchday matchday number
+ */
+const Match = async (
+  appSelector = APP_CONTAINER_SELECTOR,
+  paramMatchday = null,
+) => {
   try {
+    let matchday = paramMatchday;
+
+    // Get parent element
+    const element = document.querySelector(appSelector);
+
     // Handlebars Helpers
     [
       { name: 'localDate', method: localDate },
@@ -23,7 +62,7 @@ const Match = async (element, matchday = null) => {
       {
         name: 'if_eq',
         method: (a, b, options) =>
-          a == b ? options.fn(this) : options.inverse(this),
+          String(a) === String(b) ? options.fn(this) : options.inverse(this),
       },
     ].forEach(({ name, method }) => Handlebars.registerHelper(name, method));
 
@@ -68,48 +107,20 @@ const Match = async (element, matchday = null) => {
     init();
   } catch (error) {
     // Network error
-    if (!navigator.onLine || error.message == ERROR_FAILED_TO_FETCH) {
+    if (!navigator.onLine || error.message === ERROR_FAILED_TO_FETCH) {
       const { InfoAsNetworkError } = await import(
         /* webpackChunkName: "info_error_network" */ '../info'
       );
-      await InfoAsNetworkError(element);
+      await InfoAsNetworkError(appSelector);
     } else {
       const { InfoAsServerError } = await import(
         /* webpackChunkName: "info_error_server" */ '../info'
       );
-      await InfoAsServerError(element);
+      await InfoAsServerError(appSelector);
     }
 
     console.error(`${LOG_LABEL} ${error.message}`);
   }
-};
-
-/**
- * Manipulate DOM
- */
-const init = () => {
-  // Matchday selector
-  const matchdays = document.querySelectorAll('.matchday');
-  matchdays.forEach((matchday) => {
-    // Onclick, change hash matchday
-    matchday.addEventListener(
-      'click',
-      () => {
-        const day = matchday.dataset.matchday;
-        location.hash = `#/match?matchday=${day}`;
-      },
-      detectIt.passiveEvents ? { passive: true } : false,
-    );
-  });
-};
-
-/**
- * Get default match day
- * @return {Int}
- */
-const getDefaultMatchDay = async () => {
-  const info = await getCompetitionInfo();
-  return info.currentSeason.currentMatchday;
 };
 
 export default Match;

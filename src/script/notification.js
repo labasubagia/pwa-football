@@ -7,11 +7,10 @@ import { PUSH_VAPID_KEY_PUBLIC } from './const';
  */
 const urlB64ToUint8Array = (base64String) => {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding)
-    .replace(/\-/g, '+')
-    .replace(/_/g, '/');
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
   const rawData = atob(base64);
   const outputArray = new Uint8Array(rawData.length);
+  // eslint-disable-next-line no-plusplus
   for (let i = 0; i < rawData.length; ++i) {
     outputArray[i] = rawData.charCodeAt(i);
   }
@@ -31,7 +30,7 @@ const uInt8ArrayToStr = (uInt8Array) => {
  * Ask notification permission to user
  */
 const permissionNotification = async () => {
-  const LOG_LABEL = '[Notification]';
+  let LOG_LABEL = '[Notification]';
 
   // Check browser support
   if ('Notification' in window) {
@@ -41,43 +40,44 @@ const permissionNotification = async () => {
     // User answer
     if (result === 'denied') {
       console.log(`${LOG_LABEL} access denied`);
-      return;
     } else if (result === 'default') {
       console.log(`${LOG_LABEL} User close permission modal`);
-      return;
     } else {
       // Notification permission allowed
-      if ('PushManager' in window) {
-        const LOG_LABEL = '[Push Manager]';
 
-        try {
-          // Get registration from service worker
-          const registration = await navigator.serviceWorker.getRegistration();
+      // Break when browser not support push manager
+      if (!('PushManager' in window)) return;
 
-          // Subscribe to FCM
-          const subscription = await registration.pushManager.subscribe({
-            applicationServerKey: urlB64ToUint8Array(PUSH_VAPID_KEY_PUBLIC),
-            userVisibleOnly: true,
-          });
+      LOG_LABEL = '[Push Manager]';
 
-          // Show push subscription
-          console.log(`${LOG_LABEL} Endpoint \n${subscription.endpoint}`);
-          console.log(
-            `${LOG_LABEL} p256dh key \n${uInt8ArrayToStr(
-              subscription.getKey('p256dh'),
-            )}`,
-          );
-          console.log(
-            `${LOG_LABEL} Auth key \n${uInt8ArrayToStr(
-              subscription.getKey('auth'),
-            )}`,
-          );
-        } catch (error) {
-          console.error(`${LOG_LABEL} ${error.message}`);
-        }
+      try {
+        // Get registration from service worker
+        const registration = await navigator.serviceWorker.getRegistration();
+
+        // Subscribe to FCM
+        const subscription = await registration.pushManager.subscribe({
+          applicationServerKey: urlB64ToUint8Array(PUSH_VAPID_KEY_PUBLIC),
+          userVisibleOnly: true,
+        });
+
+        // Show push subscription
+        console.log(`${LOG_LABEL} Endpoint \n${subscription.endpoint}`);
+        console.log(
+          `${LOG_LABEL} p256dh key \n${uInt8ArrayToStr(
+            subscription.getKey('p256dh'),
+          )}`,
+        );
+        console.log(
+          `${LOG_LABEL} Auth key \n${uInt8ArrayToStr(
+            subscription.getKey('auth'),
+          )}`,
+        );
+      } catch (error) {
+        console.error(`${LOG_LABEL} ${error.message}`);
       }
     }
   }
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export { permissionNotification };

@@ -1,5 +1,5 @@
-import { DB_NAME, DB_VERSION, DB_OBJECT_STORE_NAME } from './const';
 import { openDB } from 'idb';
+import { DB_NAME, DB_VERSION, DB_OBJECT_STORE_NAME } from './const';
 
 // Local label
 const LOG_LABEL = '[IndexedDB]';
@@ -16,7 +16,7 @@ const database = async () => {
   }
 
   // When it supported
-  return await openDB(DB_NAME, DB_VERSION, {
+  return openDB(DB_NAME, DB_VERSION, {
     upgrade(db) {
       db.createObjectStore(DB_OBJECT_STORE_NAME, {
         keyPath: 'id',
@@ -41,6 +41,7 @@ const insert = async ({ objectStore = DB_OBJECT_STORE_NAME, payload }) => {
     return await transaction.done;
   } catch (error) {
     console.error(`${LOG_LABEL} Insert failed ${error}`);
+    return null;
   }
 };
 
@@ -64,6 +65,7 @@ const read = async ({ objectStore = DB_OBJECT_STORE_NAME, keyPath = '' }) => {
     return store.getAll();
   } catch (error) {
     console.error(`${LOG_LABEL} Read failed ${error}`);
+    return null;
   }
 };
 
@@ -85,6 +87,7 @@ const remove = async ({ objectStore = DB_OBJECT_STORE_NAME, keyPath }) => {
     return transaction.done;
   } catch (error) {
     console.error(`${LOG_LABEL} ${error}`);
+    return null;
   }
 };
 

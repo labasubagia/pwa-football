@@ -1,5 +1,5 @@
-import loadingTemplate from './index.hbs';
 import { compile } from 'handlebars';
+import loadingTemplate from './index.hbs';
 import './index.scss';
 
 // Local log

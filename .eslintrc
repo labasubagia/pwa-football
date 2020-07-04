@@ -1,0 +1,28 @@
+{
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "settings": {
+    // Disable react eslint
+    "react": {
+      "version": "999.999.999"
+    }
+  },
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+
+    // Allow console
+    "no-console": 0
+  }
+}
