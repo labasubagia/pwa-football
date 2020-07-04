@@ -1,5 +1,5 @@
 <div class="container">
-    
+
   <br>
   <h5 class="page-title center-align">
     Matches
@@ -11,10 +11,9 @@
   <div class="row matchday-selector">
     {{#each totalMatchArray}}
 
-      {{!-- Matchday --}}
-      <div class="col s3 m1">
-        <div 
-          class="
+    {{!-- Matchday --}}
+    <div class="col s3 m1">
+      <div class="
             {{#if_eq this ../matchday}} 
               blue white-text
             {{else}}
@@ -22,13 +21,10 @@
             {{/if_eq}}
             center-align 
             matchday
-          "
-          style="cursor:pointer"
-          data-matchday={{this}}
-          >
-          {{this}}
-        </div>
+          " style="cursor:pointer" data-matchday={{this}}>
+        {{this}}
       </div>
+    </div>
 
     {{/each}}
   </div>
@@ -45,60 +41,53 @@
     <br>
     <ul class="collection standing">
       {{#each matches}}
-        
-        {{!-- Match --}}
-        <li
-          class="collection-item match"
-          style="margin: 1rem 0; width: 100%; padding: 1rem"
-          >
+      {{!-- Match --}}
+      <li class="collection-item match" style="margin: 1rem 0; width: 100%; padding: 1rem">
 
-          {{!-- Team --}}
-          <div class="match__team">
-            
-            {{!-- Home --}}
-            <div class="match__score">
-              <span>{{this.homeTeam.name}}</span>  
-              <span class="
+        {{!-- Team --}}
+        <div class="match__team">
+
+          {{!-- Home --}}
+          <div class="match__score">
+            <span>{{this.homeTeam.name}}</span>
+            <span class="
                 {{#if_eq this.score.winner 'HOME_TEAM'}} 
                   blue-text text-darken-2  
                 {{/if_eq}}
                 ">
-                {{this.score.fullTime.homeTeam}}
-              </span>
-            </div>
+              {{this.score.fullTime.homeTeam}}
+            </span>
+          </div>
 
-            {{!-- Away --}}
-            <div class="match__score">
-              <span>{{this.awayTeam.name}}</span>
-              <span class="
+          {{!-- Away --}}
+          <div class="match__score">
+            <span>{{this.awayTeam.name}}</span>
+            <span class="
                 {{#if_eq this.score.winner 'AWAY_TEAM'}} 
                   blue-text text-darken-2 
                 {{/if_eq}}
                 ">
-                {{this.score.fullTime.awayTeam}} 
-              </span>
-            </div>
+              {{this.score.fullTime.awayTeam}}
+            </span>
           </div>
-          
-          <hr class="match__hr">
-          
-          {{!-- Time --}}
-          <span class="grey-text text-darken-1">
-            Date {{localDate this.utcDate}}<br>
-            Time {{localTime this.utcDate}}
-          </span><br>
+        </div>
 
-          {{!-- Match Status --}}
-          <div class="{{this.statusColor}} center-align match__status">
-            {{this.statusName}}
-          </div>
+        <hr class="match__hr">
 
-        </li>
+        {{!-- Time --}}
+        <span class="grey-text text-darken-1">
+          Date {{localDate this.utcDate}}<br>
+          Time {{localTime this.utcDate}}
+        </span><br>
+
+        {{!-- Match Status --}}
+        <div class="{{this.statusColor}} center-align match__status">
+          {{this.statusName}}
+        </div>
+
+      </li>
       {{/each}}
     </ul>
   </div>
   <br>
 </div>
-
-
-

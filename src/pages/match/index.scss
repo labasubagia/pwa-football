@@ -1,8 +1,8 @@
 @import '../../styles/variables';
 
 .matchday {
-  padding: .5rem;
-  margin: .5rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
   border-radius: 2px;
   box-shadow: $appBoxShadow;
 }
@@ -11,7 +11,7 @@
   padding: 1rem;
   border-radius: 5px;
   box-shadow: $appBoxShadow;
-  
+
   &__score {
     display: flex;
     justify-content: space-between;
@@ -22,11 +22,11 @@
   }
 
   &__hr {
-    border: .5px solid #eee;
+    border: 0.5px solid #eee;
   }
 
   &__status {
-    padding: .5rem;
+    padding: 0.5rem;
     color: white;
     border-radius: 5px;
     margin-top: 1rem;

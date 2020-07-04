@@ -22,18 +22,21 @@ const Standing = async (element) => {
     const context = { table: data.standings[0].table, defaultIcon };
     element.innerHTML = compile(standingTemplate)(context);
   } catch (error) {
-
     // Show info error
     if (!navigator.onLine || error.message == ERROR_FAILED_TO_FETCH) {
-      const { InfoAsNetworkError } = await import(/* webpackChunkName: "info_error_network" */ '../info');
+      const { InfoAsNetworkError } = await import(
+        /* webpackChunkName: "info_error_network" */ '../info'
+      );
       await InfoAsNetworkError(element);
     } else {
-      const { InfoAsServerError } = await import(/* webpackChunkName: "info_error_server" */ '../info');
+      const { InfoAsServerError } = await import(
+        /* webpackChunkName: "info_error_server" */ '../info'
+      );
       await InfoAsServerError(element);
     }
-    
+
     console.error(`${LOG_LABEL} ${error}`);
   }
-}
+};
 
 export default Standing;

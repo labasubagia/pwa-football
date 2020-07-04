@@ -24,7 +24,7 @@ setCacheNameDetails({
 // Cache webpack
 precacheAndRoute(self.__WB_MANIFEST, {
   // Ignore search url
-  ignoreURLParametersMatching: [/.*/], 
+  ignoreURLParametersMatching: [/.*/],
 });
 
 // Make API Offline
@@ -34,37 +34,37 @@ registerRoute(
     cacheName: 'api',
     plugins: [
       new ExpirationPlugin({
-        maxEntries: 50, // Entries count 
+        maxEntries: 50, // Entries count
         maxAgeSeconds: 60 * 60 * 24, // 1 day
         purgeOnQuotaError: true, // Clear if cache exceed quota
       }),
     ],
-  })
+  }),
 );
 
-
 // Push event
-self.addEventListener('push', event => {
+self.addEventListener(
+  'push',
+  (event) => {
+    // Read event message
+    let body = "Push doesn't have message";
+    if (event.data) body = event.data.text();
 
-  // Read event message
-  let body = "Push doesn't have message";
-  if (event.data) 
-    body = event.data.text();
+    // Notification settings
+    const options = {
+      body,
+      icon,
+      vibrate: [100, 50, 50],
+      data: {
+        dateOfArrival: Date.now(),
+        primaryKey: 1,
+      },
+    };
 
-  // Notification settings
-  const options = {
-    body,
-    icon,
-    vibrate: [100, 50, 50],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1,
-    },
-  };
-
-  event.waitUntil(
-    // Show notifications
-    self.registration.showNotification('Football App News', options)
-  );
-
-}, detectIt.passiveEvents ? { passive: true } : false);
+    event.waitUntil(
+      // Show notifications
+      self.registration.showNotification('Football App News', options),
+    );
+  },
+  detectIt.passiveEvents ? { passive: true } : false,
+);

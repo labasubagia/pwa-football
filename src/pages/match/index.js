@@ -11,26 +11,24 @@ const LOG_LABEL = '[Match Page]';
 
 /**
  * Show Matches page
- * @param {Element} element 
+ * @param {Element} element
  * @param {Int} matchday
  */
 const Match = async (element, matchday = null) => {
-  
   try {
-
     // Handlebars Helpers
-    [ 
-      { name: 'localDate', method: localDate }, 
+    [
+      { name: 'localDate', method: localDate },
       { name: 'localTime', method: localTime },
-      { name: 'if_eq', method: (a, b, options) => 
-        a == b ? options.fn(this): options.inverse(this)
-      }
-    ].forEach(({ name, method }) => 
-      Handlebars.registerHelper(name, method)
-    );
+      {
+        name: 'if_eq',
+        method: (a, b, options) =>
+          a == b ? options.fn(this) : options.inverse(this),
+      },
+    ].forEach(({ name, method }) => Handlebars.registerHelper(name, method));
 
     const matchStatusColor = {
-      SCHEDULED: 'purple',  
+      SCHEDULED: 'purple',
       LIVE: 'blue',
       IN_PLAY: 'light-blue',
       PAUSED: 'brown',
@@ -38,7 +36,7 @@ const Match = async (element, matchday = null) => {
       POSTPONED: 'pink',
       SUSPENDED: 'orange',
       CANCELED: 'red',
-    }
+    };
 
     // Matchday settings
     const totalMatchday = 38;
@@ -46,57 +44,64 @@ const Match = async (element, matchday = null) => {
     const currentMatchday = await getDefaultMatchDay();
 
     // Default matchday
-    if (!matchday || (matchday < 1 || matchday > 38 )) {
+    if (!matchday || matchday < 1 || matchday > 38) {
       matchday = currentMatchday;
     }
 
     // Get matchday data
     let { matches } = await getCompetitionMatches({ matchday });
-    matches = matches.map(match => ({
+    matches = matches.map((match) => ({
       ...match,
       statusColor: matchStatusColor[match.status] || 'black',
       statusName: match.status.replace('_', ' '),
     }));
 
     // Load template
-    element.innerHTML = compile(matchTemplate)({ matches, totalMatchArray, matchday, currentMatchday });
+    element.innerHTML = compile(matchTemplate)({
+      matches,
+      totalMatchArray,
+      matchday,
+      currentMatchday,
+    });
 
     // Manipulate DOM
     init();
-
   } catch (error) {
-
     // Network error
     if (!navigator.onLine || error.message == ERROR_FAILED_TO_FETCH) {
-      const { InfoAsNetworkError } = await import(/* webpackChunkName: "info_error_network" */ '../info');
+      const { InfoAsNetworkError } = await import(
+        /* webpackChunkName: "info_error_network" */ '../info'
+      );
       await InfoAsNetworkError(element);
     } else {
-      const { InfoAsServerError } = await import(/* webpackChunkName: "info_error_server" */ '../info');
+      const { InfoAsServerError } = await import(
+        /* webpackChunkName: "info_error_server" */ '../info'
+      );
       await InfoAsServerError(element);
     }
 
     console.error(`${LOG_LABEL} ${error.message}`);
   }
-}
+};
 
 /**
  * Manipulate DOM
  */
 const init = () => {
-
   // Matchday selector
   const matchdays = document.querySelectorAll('.matchday');
-  matchdays.forEach(matchday => {
-
+  matchdays.forEach((matchday) => {
     // Onclick, change hash matchday
-    matchday.addEventListener('click', () => {
-      const day = matchday.dataset.matchday;
-      location.hash = `#/match?matchday=${day}`;
-    }, detectIt.passiveEvents ? { passive: true } : false);
-
+    matchday.addEventListener(
+      'click',
+      () => {
+        const day = matchday.dataset.matchday;
+        location.hash = `#/match?matchday=${day}`;
+      },
+      detectIt.passiveEvents ? { passive: true } : false,
+    );
   });
-  
-}
+};
 
 /**
  * Get default match day
@@ -105,6 +110,6 @@ const init = () => {
 const getDefaultMatchDay = async () => {
   const info = await getCompetitionInfo();
   return info.currentSeason.currentMatchday;
-}
+};
 
 export default Match;

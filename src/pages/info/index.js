@@ -1,8 +1,8 @@
 import detectIt from 'detect-it';
 import errorTemplate from './index.hbs';
-import { compile} from 'handlebars';
+import { compile } from 'handlebars';
 import { timeout as waitTimeout } from '../../script/util';
-import { 
+import {
   PAGE_INFO_IMG_SERVER_ERROR,
   PAGE_INFO_IMG_WARNING,
   PAGE_INFO_IMG_EMPTY,
@@ -34,81 +34,78 @@ const images = {
 
 /**
  * Load Info page
- * @param {Element} element 
- * @param {String} type 
- * @param {String} title 
+ * @param {Element} element
+ * @param {String} type
+ * @param {String} title
  * @param {String} message
- * @param {String} additionalHtml Html in string 
+ * @param {String} additionalHtml Html in string
  * @param {Int} timeout Millisecond
  */
 const Info = async ({
-    element, 
-    image = PAGE_INFO_IMG_WARNING, 
-    title, 
-    message, 
-    timeout,
-    actionText = PAGE_INFO_CONTENT_ACTION_TEXT_BACK, 
-    callback = () => {
-      // Default back to previous page
-      console.log(`${LOG_LABEL} Back to previous page`); 
-      history.back();
-    }, 
-  }) => {
+  element,
+  image = PAGE_INFO_IMG_WARNING,
+  title,
+  message,
+  timeout,
+  actionText = PAGE_INFO_CONTENT_ACTION_TEXT_BACK,
+  callback = () => {
+    // Default back to previous page
+    console.log(`${LOG_LABEL} Back to previous page`);
+    history.back();
+  },
+}) => {
   try {
-
     // Compile template
-    element.innerHTML = compile(errorTemplate)({ image: images[image], title, message, actionText });
+    element.innerHTML = compile(errorTemplate)({
+      image: images[image],
+      title,
+      message,
+      actionText,
+    });
 
     // Init btn action
     const btnActionDOM = document.querySelector('#btnAction');
-    if(btnActionDOM) {
+    if (btnActionDOM) {
       btnActionDOM.addEventListener(
-        'click', 
-        callback, 
-        detectIt.passiveEvents 
-          ? { passive: true } 
-          : false
+        'click',
+        callback,
+        detectIt.passiveEvents ? { passive: true } : false,
       );
     }
 
     // Pretend to loading
-    timeout && await waitTimeout(timeout);
-
+    timeout && (await waitTimeout(timeout));
   } catch (error) {
     console.error(`${LOG_LABEL} Failed to load ${error}`);
   }
-}
+};
 
 /**
  * Info show network error
- * @param {Element} element 
+ * @param {Element} element
  */
 const InfoAsNetworkError = async (element) => {
   await Info({
-    element, 
+    element,
     actionText: PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
     callback: refreshAppContent,
-    title: PAGE_INFO_CONTENT_NETWORK_ERROR_TITLE, 
+    title: PAGE_INFO_CONTENT_NETWORK_ERROR_TITLE,
     message: PAGE_INFO_CONTENT_NETWORK_ERROR_MESSAGE,
-  })
-}
+  });
+};
 
 /**
  * Info show server error
- * @param {Element} element 
+ * @param {Element} element
  */
 const InfoAsServerError = async (element) => {
   await Info({
-    element, 
+    element,
     actionText: PAGE_INFO_CONTENT_ACTION_TEXT_RELOAD,
     callback: refreshAppContent,
-    title: PAGE_INFO_CONTENT_SERVER_ERROR_TITLE, 
+    title: PAGE_INFO_CONTENT_SERVER_ERROR_TITLE,
     message: PAGE_INFO_CONTENT_SERVER_ERROR_MESSAGE,
-  })
-}
-
-export {
-  Info,
-  InfoAsNetworkError,
-  InfoAsServerError, 
+  });
 };
+
+export { Info, InfoAsNetworkError, InfoAsServerError };
