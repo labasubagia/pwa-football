@@ -32,7 +32,10 @@ const Standing = async (appSelector = APP_CONTAINER_SELECTOR) => {
     element.innerHTML = compile(standingTemplate)(context);
   } catch (error) {
     // Show info error
-    if (!navigator.onLine || error.message === ERROR_FAILED_TO_FETCH) {
+    if (
+      !navigator.onLine ||
+      String(error.message) === String(ERROR_FAILED_TO_FETCH)
+    ) {
       const { InfoAsNetworkError } = await import(
         /* webpackChunkName: "info_error_network" */ '../info'
       );

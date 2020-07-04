@@ -12,7 +12,7 @@ const { PUSH_SENDER_KEY } = require('./src/script/const');
 
 // Webpack config
 const config = (_env, options) => {
-  const isProd = options.mode === 'production';
+  const isProd = String(options.mode) === 'production';
 
   // Base config
   const base = {

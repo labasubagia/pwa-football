@@ -38,9 +38,9 @@ const permissionNotification = async () => {
     const result = await Notification.requestPermission();
 
     // User answer
-    if (result === 'denied') {
+    if (String(result) === 'denied') {
       console.log(`${LOG_LABEL} access denied`);
-    } else if (result === 'default') {
+    } else if (String(result) === 'default') {
       console.log(`${LOG_LABEL} User close permission modal`);
     } else {
       // Notification permission allowed

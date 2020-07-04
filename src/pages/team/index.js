@@ -133,7 +133,7 @@ const Team = async (appSelector, id) => {
     // Manipulate data for UI
     // Because cannot manipulate this data in handlebars template's  loop
     matches = matches.map((match) => {
-      const isAway = match.awayTeam.id === id;
+      const isAway = String(match.awayTeam.id) === String(id);
       return {
         vsTeam: isAway ? match.homeTeam.name : match.awayTeam.name,
         matchType: `${isAway ? 'Away' : 'Home'} Match`,
@@ -151,7 +151,10 @@ const Team = async (appSelector, id) => {
     init({ ...team, matches });
   } catch (error) {
     // Show info error
-    if (!navigator.onLine || error.message === ERROR_FAILED_TO_FETCH) {
+    if (
+      !navigator.onLine ||
+      String(error.message) === String(ERROR_FAILED_TO_FETCH)
+    ) {
       const { InfoAsNetworkError } = await import(
         /* webpackChunkName: "info_error_network" */ '../info'
       );

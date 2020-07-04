@@ -99,7 +99,7 @@ const getRequest = async (paramUrl, queryParams = null) => {
     const cacheData = await getFromCache(url, false);
 
     // Abort error return cache data
-    if (error.name === 'AbortError') {
+    if (String(error.name) === 'AbortError') {
       console.warn(`${LOG_LABEL} ${error.name} Connection is to slow`);
 
       // Return cache if exist
@@ -108,7 +108,7 @@ const getRequest = async (paramUrl, queryParams = null) => {
 
     // When try request online data and fail
     // Use local data if exist
-    if (error.message === ERROR_FAILED_TO_FETCH && cacheData) {
+    if (String(error.message) === String(ERROR_FAILED_TO_FETCH) && cacheData) {
       console.warn(`${LOG_LABEL} ${error.message}, so use local data`);
       return cacheData;
     }

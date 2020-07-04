@@ -107,7 +107,10 @@ const Match = async (
     init();
   } catch (error) {
     // Network error
-    if (!navigator.onLine || error.message === ERROR_FAILED_TO_FETCH) {
+    if (
+      !navigator.onLine ||
+      String(error.message) === String(ERROR_FAILED_TO_FETCH)
+    ) {
       const { InfoAsNetworkError } = await import(
         /* webpackChunkName: "info_error_network" */ '../info'
       );
