@@ -7,18 +7,18 @@
 
     {{!-- Menu Icon --}}
     <a href="#" style="font-size:2rem" class="sidenav-trigger black-text" data-target="mobile-nav">☰</a>
-    
+
     {{!-- TopNav --}}
     <ul class="right hide-on-med-and-down">
       {{#each routes}}
-        <li><a href="{{this.link}}" class="black-text">{{this.label}}</a></li>
+      <li><a href="{{this.link}}" class="black-text">{{this.label}}</a></li>
       {{/each}}
     </ul>
 
-    {{!-- Sidenav --}}
+    {{!-- Sidebar --}}
     <ul id="mobile-nav" class="sidenav">
       {{#each routes}}
-        <li><a href="{{this.link}}" class="waves-effect">{{this.label}}</a></li>
+      <li><a href="{{this.link}}" class="waves-effect">{{this.label}}</a></li>
       {{/each}}
     </ul>
   </div>

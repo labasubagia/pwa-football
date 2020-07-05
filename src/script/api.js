@@ -1,10 +1,10 @@
-import { 
-  API_BASE_URL, 
-  BROWSER_CACHE, 
+import {
+  API_BASE_URL,
+  BROWSER_CACHE,
   API_CONFIG_COMPETITION,
-  ERROR_FAILED_TO_FETCH, 
+  ERROR_FAILED_TO_FETCH,
 } from './const';
-import { safeUrl } from './util'
+import { safeUrl } from './util';
 
 const LOG_LABEL = '[Fetch]';
 
@@ -16,113 +16,99 @@ const headers = {
 /**
  * Get data from cache first
  * Update when online is optional
- * @param {String} url 
- * @param {Boolean} isOnlineUpdate 
+ * @param {String} url
+ * @param {Boolean} isOnlineUpdate
  */
 const getFromCache = async (url, isOnlineUpdate = true) => {
-  
-  try {
-  
-    // Check url in cache
-    const cacheResponse = await caches.match(url);
-        
-    // Cache data is exist
-    if (cacheResponse) {
+  // Check url in cache
+  const cacheResponse = await caches.match(url);
 
-      // Assingn cache data
-      const cacheData = await cacheResponse.clone().json();
-    
-      // Browser is online
-      if (navigator.onLine && isOnlineUpdate) {
+  // Cache data is exist
+  if (cacheResponse) {
+    // Assign cache data
+    const cacheData = await cacheResponse.clone().json();
 
-        console.log(`${LOG_LABEL} Check data to ${url}`);
+    // Browser is online
+    if (navigator.onLine && isOnlineUpdate) {
+      console.log(`${LOG_LABEL} Check data to ${url}`);
 
-        // When connection slow
-        // Abort fetch
-        const controller = new AbortController();
-        const { signal } = controller;
+      // When connection slow
+      // Abort fetch
+      const controller = new AbortController();
+      const { signal } = controller;
 
-        // Throw AbortError when time is up
-        setTimeout(() => controller.abort(), 5000);
-        
-        // Get server data
-        const serverResponse = await fetch(url, { headers, signal });
-        const serverData = await serverResponse.clone().json();
-        
-        console.log(`${LOG_LABEL} Check data retrived from ${url}`);
+      // Throw AbortError when time is up
+      setTimeout(() => controller.abort(), 5000);
 
-        // Compare server & cache data
-        // Use server data when data not same
-        if (JSON.stringify(cacheData) != JSON.stringify(serverData)) {
-          console.log(`${LOG_LABEL} Update from ${url}`);
-          return serverData;
-        }
+      // Get server data
+      const serverResponse = await fetch(url, { headers, signal });
+      const serverData = await serverResponse.clone().json();
+
+      console.log(`${LOG_LABEL} Check data retrieved from ${url}`);
+
+      // Compare server & cache data
+      // Use server data when data not same
+      if (JSON.stringify(cacheData) !== JSON.stringify(serverData)) {
+        console.log(`${LOG_LABEL} Update from ${url}`);
+        return serverData;
       }
-      
-      // Load from cache
-      console.log(`${LOG_LABEL} Local ${url}`);
-      return cacheData;
     }
 
-    return null;
-  
-  } catch (error) {
-    // Throw error to scope that is function called
-    throw error;
+    // Load from cache
+    console.log(`${LOG_LABEL} Local ${url}`);
+    return cacheData;
   }
 
-}
+  return null;
+};
 
 /**
  * Fetch GET Request
- * @param {String} url 
- * @param {String} queryParams
- * @return {Promise} 
+ * @param {String} paramUrl
+ * @param {Object} queryParams
+ * @return {Promise}
  */
-const getRequest = async (url, queryParams = null) => {
+const getRequest = async (paramUrl, queryParams = null) => {
+  let url = paramUrl;
 
-  // Add qeury params to url
+  // Add query params to url
   if (queryParams) {
-    url = `${url}?${ new URLSearchParams(queryParams) }`;
+    url = `${url}?${new URLSearchParams(queryParams)}`;
   }
 
   // Make url safe
   url = safeUrl(url);
 
   try {
-
     // When browser support cache
     // Load from cache first
-    if (BROWSER_CACHE in window) {  
-      
+    if (BROWSER_CACHE in window) {
       // Get data from cache
       // If online, try to request online data
-      let cacheFirstData = await getFromCache(url);
+      const cacheFirstData = await getFromCache(url);
       if (cacheFirstData) return cacheFirstData;
-    } 
-    
+    }
+
     // When browser doesn't support cache or cache not exist
     // Server request
     console.log(`${LOG_LABEL} Remote ${url}`);
     const response = await fetch(url, { headers });
     return response.json();
-
   } catch (error) {
-
     // Try to get cache data
     const cacheData = await getFromCache(url, false);
-    
+
     // Abort error return cache data
-    if (error.name === 'AbortError') {
+    if (String(error.name) === 'AbortError') {
       console.warn(`${LOG_LABEL} ${error.name} Connection is to slow`);
-      
+
       // Return cache if exist
       if (cacheData) return cacheData;
     }
 
     // When try request online data and fail
     // Use local data if exist
-    if (error.message === ERROR_FAILED_TO_FETCH && cacheData) {
+    if (String(error.message) === String(ERROR_FAILED_TO_FETCH) && cacheData) {
       console.warn(`${LOG_LABEL} ${error.message}, so use local data`);
       return cacheData;
     }
@@ -130,8 +116,7 @@ const getRequest = async (url, queryParams = null) => {
     // And throw to scope where this function used
     throw error;
   }
-}
-
+};
 
 /**
  * Get Standings Premier League
@@ -140,48 +125,48 @@ const getRequest = async (url, queryParams = null) => {
 const getStanding = async () => {
   const url = `${API_BASE_URL}/competitions/${API_CONFIG_COMPETITION}/standings`;
   return getRequest(url);
-}
+};
 
 /**
  * Get Team By Id
- * @param {Strning, Int} id Team ID
- * @return {Promise} 
+ * @param {String, Int} id Team ID
+ * @return {Promise}
  */
-const getTeam = async (id)  => {
+const getTeam = async (id) => {
   const url = `${API_BASE_URL}/teams/${id}`;
   return getRequest(url);
-}
+};
 
 /**
  * Get matches of a team
  * @param {String, Int} id Team ID
- * @param {String} queryParams url params
+ * @param {Object} queryParams url params
  * @return {Promise}
  */
 const getTeamMatches = async (id, queryParams = null) => {
   const url = `${API_BASE_URL}/teams/${id}/matches`;
   return getRequest(url, queryParams);
-}
+};
 
 /**
  * Get competition matches
- * @param {String} queryParams url params
- * @return {Promise} 
+ * @param {Object} queryParams url params
+ * @return {Promise}
  */
 const getCompetitionMatches = async (queryParams = null) => {
   const url = `${API_BASE_URL}/competitions/${API_CONFIG_COMPETITION}/matches`;
   return getRequest(url, queryParams);
-}
+};
 
 /**
  * Get competition info
- * @param {String} queryParams url params
- * @return {Promise} 
+ * @param {Object} queryParams url params
+ * @return {Promise}
  */
 const getCompetitionInfo = async (queryParams = null) => {
   const url = `${API_BASE_URL}/competitions/${API_CONFIG_COMPETITION}`;
   return getRequest(url, queryParams);
-}
+};
 
 export {
   getRequest,
@@ -190,4 +175,4 @@ export {
   getTeamMatches,
   getCompetitionMatches,
   getCompetitionInfo,
-}
+};

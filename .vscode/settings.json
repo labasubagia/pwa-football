@@ -1,3 +1,14 @@
 {
-    "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "cSpell.words": [
+    "Serie",
+    "devtool",
+    "matchday",
+    "matchdays",
+    "myteam",
+    "plusplus",
+    "readwrite",
+    "sidenav"
+  ]
 }

@@ -1,23 +1,20 @@
 <div class="container">
   <div class="team">
-    
+
     {{!-- Page title --}}
     <div class="teamBrand">
       <br>
       <h5 class="center-align page-title">{{team.name}}</h5>
       <br>
-      <img class="teamBrand__logo" alt="logo" src="{{safeUrl team.crestUrl}}"/>
+      <img class="teamBrand__logo" alt="logo" src="{{safeUrl team.crestUrl}}" />
       <br>
       <p class="center-align grey-text text-darken-2">{{team.address}}<br>{{team.area.name}}</p>
 
       {{!-- Show if team is favorite --}}
       <h6 id="alreadyFavorite" class="grey-text text-darken-2 teamAddAction">This is My Team</h6>
-      
+
       {{!-- Show if team is not favorite --}}
-      <button 
-        id="btnSetFavorite"
-        class="blue z-depth-0 waves-effect waves-light btn teamAddAction" 
-        >
+      <button id="btnSetFavorite" class="blue z-depth-0 waves-effect waves-light btn teamAddAction">
         Set as my team
       </button>
 
@@ -32,30 +29,34 @@
             <span class="card-title">Basic Info</span>
             <hr class="teamHorizontalLine">
             <ul class="collapsible teamCollapsible z-depth-0 grey-text text-darken-2">
-              
+
               {{!-- Stadium --}}
               <li>
                 <div class="collapsible-header teamCollapsible__header">Stadium</div>
                 <div class="collapsible-body teamCollapsible__body"><span>{{team.venue}}</span></div>
               </li>
-              
+
               {{!-- Color --}}
               <li>
                 <div class="collapsible-header">Club Color</div>
                 <div class="collapsible-body teamCollapsible__body"><span>{{team.clubColors}}</span></div>
               </li>
-              
+
               {{!-- Address --}}
               <li>
                 <div class="collapsible-header">Address</div>
-                <div class="collapsible-body teamCollapsible__body"><span">{{team.address}}</span"></div>
+                <div class="collapsible-body teamCollapsible__body">
+                  <span">{{team.address}}</span">
+                </div>
               </li>
-              
+
               {{!-- Email --}}
               {{#if team.email}}
               <li>
                 <div class="collapsible-header">Email</div>
-                <div class="collapsible-body teamCollapsible__body"><span">{{team.email}}</span"></div>
+                <div class="collapsible-body teamCollapsible__body">
+                  <span">{{team.email}}</span">
+                </div>
               </li>
               {{/if}}
 
@@ -63,11 +64,13 @@
               {{#if team.website}}
               <li>
                 <div class="collapsible-header">Website</div>
-                <div class="collapsible-body teamCollapsible__body"><span">{{team.website}}</span"></div>
+                <div class="collapsible-body teamCollapsible__body">
+                  <span">{{team.website}}</span">
+                </div>
               </li>
               {{/if}}
-            
-            </ul>      
+
+            </ul>
           </div>
         </div>
       </div>
@@ -79,11 +82,11 @@
             <span class="card-title">Competitions</span>
             <hr class="teamHorizontalLine">
             <p class="grey-text text=darken-2">
-              <ul>
-                {{#each team.activeCompetitions}}
-                  <li class="grey-text text-darken-2">- {{this.name}}</li>
-                {{/each}}
-              </ul>
+            <ul>
+              {{#each team.activeCompetitions}}
+              <li class="grey-text text-darken-2">- {{this.name}}</li>
+              {{/each}}
+            </ul>
             </p>
           </div>
         </div>
@@ -97,20 +100,20 @@
             <hr class="teamHorizontalLine">
             <ul class="collapsible teamCollapsible z-depth-0 grey-text text-darken-2">
               {{#each matches}}
-                <li>
-                  <div class="collapsible-header teamCollapsible__header">{{this.vsTeam}}</div>
-                  <div class="collapsible-body teamCollapsible__body">
-                    <span>
-                      - {{this.competition.name}} <br>
-                      - Matchday {{this.matchday}} <br>
-                      - {{this.matchType}} <br>
-                      - On {{localDate this.utcDate}} <br>
-                      - At {{localTime this.utcDate}} <br>
-                    </span>
-                  </div>  
-                </li>
+              <li>
+                <div class="collapsible-header teamCollapsible__header">{{this.vsTeam}}</div>
+                <div class="collapsible-body teamCollapsible__body">
+                  <span>
+                    - {{this.competition.name}} <br>
+                    - Matchday {{this.matchday}} <br>
+                    - {{this.matchType}} <br>
+                    - On {{localDate this.utcDate}} <br>
+                    - At {{localTime this.utcDate}} <br>
+                  </span>
+                </div>
+              </li>
               {{/each}}
-            </ul>      
+            </ul>
           </div>
         </div>
       </div>

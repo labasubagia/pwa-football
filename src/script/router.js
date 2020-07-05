@@ -1,14 +1,13 @@
 import { APP_CONTAINER_SELECTOR } from './const';
 
 // Local Log
-const LOG_LABEL = '[Router]'; 
+const LOG_LABEL = '[Router]';
 
 /**
  * Selector for app shell content
- * @param {String} appSelector 
+ * @param {String} appSelector
  */
 const router = async (appSelector = APP_CONTAINER_SELECTOR) => {
-
   // Modify page title
   let pageTitle = document.title;
 
@@ -22,70 +21,80 @@ const router = async (appSelector = APP_CONTAINER_SELECTOR) => {
     }
 
     // Hash & params
-    let [hash, param] = location.hash.split('?');
+    let [hash, param] = window.location.hash.split('?');
     hash = hash || '#/';
     param = new URLSearchParams(param);
 
     // Set App shell content
-    switch(hash) {
-
+    switch (hash) {
       // Home show standing page
-      case '#/':
+      case '#/': {
         pageTitle = 'Standing';
-        const { default: Standing } = await import(/* webpackChunkName: "standing" */ '../pages/standing');
-        await Standing(app);
+        const { default: Standing } = await import(
+          /* webpackChunkName: "standing" */ '../pages/standing'
+        );
+        await Standing(appSelector);
         break;
+      }
 
       // Team detail
-      case '#/team':
+      case '#/team': {
         pageTitle = 'Team';
-        const { default: Team } = await import(/* webpackChunkName: "team" */ '../pages/team');
+        const { default: Team } = await import(
+          /* webpackChunkName: "team" */ '../pages/team'
+        );
         const id = param.get('id');
-        await Team(app, id);
+        await Team(appSelector, id);
         break;
-      
+      }
+
       // My Team
-      case '#/myteam':
+      case '#/myteam': {
         pageTitle = 'My Team';
-        const { default: MyTeam } = await import(/* webpackChunkName: "myteam" */ '../pages/myteam');
-        await MyTeam(app);
+        const { default: MyTeam } = await import(
+          /* webpackChunkName: "myteam" */ '../pages/myteam'
+        );
+        await MyTeam(appSelector);
         break;
+      }
 
       // Match
-      case '#/match':
+      case '#/match': {
         pageTitle = 'Matches';
-        const { default: Match } = await import(/* webpackChunkName: "match" */ '../pages/match'); 
+        const { default: Match } = await import(
+          /* webpackChunkName: "match" */ '../pages/match'
+        );
         const matchday = param.get('matchday') || null;
-        await Match(app, matchday);
+        await Match(appSelector, matchday);
         break;
+      }
 
       // 404 page
-      default:
+      default: {
         const page = hash.substr(2);
         pageTitle = '404';
-        const { Info } = await import(/* webpackChunkName: "info" */ '../pages/info');
+        const { Info } = await import(
+          /* webpackChunkName: "info" */ '../pages/info'
+        );
         await Info({
-          element: app, 
-          title: pageTitle, 
+          appSelector,
+          title: pageTitle,
           message: `Page <strong>${page}</strong> not found, please check your url!`,
           timeout: 1000,
         });
+      }
     }
-
   } catch (error) {
-    
     // Log error
     console.error(`${LOG_LABEL} ${error.message}`);
 
     // Throw error to scope that this function called
     throw error;
-  
   } finally {
-    
     // Change title
     document.title = pageTitle;
   }
+};
 
-}
-
-export { router }
+// eslint-disable-next-line import/prefer-default-export
+export { router };

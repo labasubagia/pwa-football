@@ -8,32 +8,30 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const buildPath = path.resolve(__dirname, 'dist');
-const { PUSH_SENDERKEY } = require('./src/script/const');
+const { PUSH_SENDER_KEY } = require('./src/script/const');
 
 // Webpack config
 const config = (_env, options) => {
+  const isProd = String(options.mode) === 'production';
 
-  const isProd = options.mode == 'production';
-  
   // Base config
   const base = {
-
     entry: {
       index: './src/index.js',
     },
-  
+
     // Output to script folder in dist/
     output: {
       filename: 'script/[name].[contenthash].js',
       path: buildPath,
     },
-  
+
     resolve: {
       alias: {
         handlebars: 'handlebars/dist/handlebars.min.js',
-      }
+      },
     },
-  
+
     module: {
       rules: [
         // Images
@@ -48,41 +46,35 @@ const config = (_env, options) => {
             },
           },
         },
-  
+
         // Babel
         {
           test: /\.m?js$/,
           exclude: /(node_modules)/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-              plugins: [
-                ['@babel/transform-runtime'],
-              ],
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+                plugins: [['@babel/transform-runtime']],
+              },
             },
-          },
+            'eslint-loader',
+          ],
         },
-  
+
         // CSS
         {
           test: /\.css$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            'css-loader',
-          ],
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
-  
+
         // Sass
         {
           test: /\.s[ac]ss$/i,
-          use: [
-            MiniCssExtractPlugin.loader,
-            'css-loader',
-            'sass-loader',
-          ],
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
         },
-  
+
         // Handlebars
         {
           test: /\.hbs$/,
@@ -90,11 +82,11 @@ const config = (_env, options) => {
         },
       ],
     },
-  
+
     plugins: [
       // Clean Build path (dist)
       new CleanWebpackPlugin({ root: buildPath }),
-      
+
       // Minify CSS
       // Output in css folder in dist/
       new MiniCssExtractPlugin({
@@ -115,7 +107,7 @@ const config = (_env, options) => {
         description: 'Show football standings and match',
         background_color: '#ffffff',
         theme_color: '#ffffff',
-        gcm_sender_id: PUSH_SENDERKEY,
+        gcm_sender_id: PUSH_SENDER_KEY,
         ios: true,
         icons: [
           {
@@ -140,7 +132,7 @@ const config = (_env, options) => {
             size: 1024,
             destination: path.join('icons', 'maskable'),
             purpose: 'maskable',
-          }
+          },
         ],
       }),
 
@@ -149,9 +141,8 @@ const config = (_env, options) => {
         swSrc: './src/sw/sw.js',
         swDest: 'sw.js',
       }),
-
     ],
-  
+
     optimization: {
       minimize: true,
 
@@ -167,11 +158,13 @@ const config = (_env, options) => {
             name(module) {
               // Get the name. E.g. node_modules/packageName/not/this/part.js
               // or node_modules/packageName
-              const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+              const packageName = module.context.match(
+                /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+              )[1];
 
               // Npm package names are URL-safe, but some servers don't like @ symbols
               return `npm.${packageName.replace('@', '')}`;
-            }
+            },
           },
         },
       },
@@ -181,9 +174,9 @@ const config = (_env, options) => {
         new TerserPlugin({
           cache: true,
           parallel: true,
-          sourceMap: isProd,
-          test:/\.m?js$/,
-          
+          sourceMap: !isProd,
+          test: /\.m?js$/,
+
           // Remove comments
           terserOptions: {
             output: {
@@ -191,7 +184,7 @@ const config = (_env, options) => {
             },
           },
 
-          // Remove licencse
+          // Remove license
           extractComments: false,
         }),
         new OptimizeCssAssetsPlugin({}),
@@ -201,10 +194,10 @@ const config = (_env, options) => {
 
   // Development config
   if (!isProd) {
-    base.devtool = 'source-map';
+    base.devtool = 'inline-source-map';
   }
 
   return base;
-}
+};
 
 module.exports = config;

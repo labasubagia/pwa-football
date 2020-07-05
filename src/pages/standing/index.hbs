@@ -5,33 +5,27 @@
     Standing
   </h5>
   <br>
-  
+
   {{!-- Team List --}}
   <ul class="collection standing">
     {{#each table}}
-      <li
-        class="collection-item avatar standing__item" 
-        onclick="location.href = '/#/team?id={{this.team.id}}'"
-        style="cursor: pointer"
-        >
-        {{!-- Team Logo --}}
-        <img 
-          src="{{safeUrl this.team.crestUrl}}"
-          onerror="this.src='{{../defaultIcon}}'; this.onerror=''"
-          class="circle standing__item__image"
-          alt="Club Logo">
-        
-        {{!-- Information --}}
-        <div>
-          <span class="title">{{ this.team.name }}</span>
-          <p class="grey-text text-darken-1">
-            Position {{ this.position }} <br/>
-            Point {{ this.points }}
-          </p>
-        </div>
+    <li class="collection-item avatar standing__item" onclick="location.href = '/#/team?id={{this.team.id}}'"
+      style="cursor: pointer">
+      {{!-- Team Logo --}}
+      <img src="{{safeUrl this.team.crestUrl}}" onerror="this.src='{{../defaultIcon}}'; this.onerror=''"
+        class="circle standing__item__image" alt="Club Logo">
 
-      </li>
-      <br>
+      {{!-- Information --}}
+      <div>
+        <span class="title">{{ this.team.name }}</span>
+        <p class="grey-text text-darken-1">
+          Position {{ this.position }} <br />
+          Point {{ this.points }}
+        </p>
+      </div>
+
+    </li>
+    <br>
     {{/each}}
   </ul>
 </div>

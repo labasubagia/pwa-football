@@ -1,5 +1,5 @@
-import loadingTemplate from './index.hbs';
 import { compile } from 'handlebars';
+import loadingTemplate from './index.hbs';
 import './index.scss';
 
 // Local log
@@ -7,10 +7,9 @@ const LOG_LABEL = '[Loading Partial]';
 
 // Loading component class
 class Loading {
-
   /**
    * Constructor
-   * @param {Element} element 
+   * @param {Element} element
    */
   constructor(element) {
     this.element = element;
@@ -23,7 +22,7 @@ class Loading {
 
   /**
    * Show and hide loading indicator
-   * @param {Boolean} state 
+   * @param {Boolean} state
    */
   show(state = true) {
     const loading = this.element.querySelector('#loading');

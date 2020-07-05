@@ -6,10 +6,10 @@
 
 //  Import
 const webPush = require('web-push');
-const { 
-  PUSH_SENDERKEY, 
-  PUSH_VAPIDKEY_PRIVATE, 
-  PUSH_VAPIDKEY_PUBLIC 
+const {
+  PUSH_SENDER_KEY,
+  PUSH_VAPID_KEY_PRIVATE,
+  PUSH_VAPID_KEY_PUBLIC,
 } = require('../script/const');
 
 // This properties need to changed based on client
@@ -24,21 +24,23 @@ const pushSubscription = {
 // Message
 const payload = 'Hello football app user';
 
-// Webpush options
+// Web push options
 const options = {
-  gcmAPIKey: PUSH_SENDERKEY,
+  gcmAPIKey: PUSH_SENDER_KEY,
   TTL: 60,
   vapidDetails: {
     subject: 'mailto:labasubagia22@gmail.com',
-    publicKey: PUSH_VAPIDKEY_PUBLIC,
-    privateKey: PUSH_VAPIDKEY_PRIVATE,
-  }
+    publicKey: PUSH_VAPID_KEY_PUBLIC,
+    privateKey: PUSH_VAPID_KEY_PRIVATE,
+  },
 };
 
-// Run webpush
+// Run web push
 (async () => {
   try {
-    console.log(await webPush.sendNotification(pushSubscription, payload, options));
+    console.log(
+      await webPush.sendNotification(pushSubscription, payload, options),
+    );
   } catch (error) {
     console.log(error);
   }

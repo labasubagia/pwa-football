@@ -9,14 +9,14 @@
     box-shadow: $appBoxShadow;
     margin-bottom: 1rem;
     display: flex;
-    align-items: center;  
+    align-items: center;
 
     &__image {
       border-radius: 0 !important;
       max-width: 40px;
       max-height: 55px;
       width: unset !important;
-      height: unset !important;    
+      height: unset !important;
     }
   }
 }

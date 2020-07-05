@@ -2,8 +2,8 @@ import detectIt from 'detect-it';
 import { registerServiceWorker } from './sw/register';
 import { router } from './script/router';
 import { APP_CONTAINER_SELECTOR } from './script/const';
-import { permissionNotification } from './script/notification'
-import './styles/main.scss';
+import { permissionNotification } from './script/notification';
+import './index.scss';
 
 // Import vectors
 import ellipse1 from './assets/vector/ellipse1.svg';
@@ -14,7 +14,7 @@ import ellipse3 from './assets/vector/ellipse3.svg';
 import Loading from './partial/loading';
 import Navigation from './partial/navigation';
 
-// Navigation Partial 
+// Navigation Partial
 const navigationDOM = document.querySelector('#nav');
 const navigation = new Navigation(navigationDOM, '.sidenav');
 
@@ -35,35 +35,29 @@ const initVectors = () => {
   vector2.src = ellipse2;
   vector3.src = ellipse3;
   vector4.src = ellipse3;
-}
+};
 
-
-/** 
+/**
  * Handle location hash changed
  * Change app content
  */
-const routeHandler = async () => { 
-
+const routeHandler = async () => {
   try {
-
     loading.show();
     navigation.closeSidenav();
 
     // Use router
     await router(APP_CONTAINER_SELECTOR);
-
   } catch (error) {
     const LOG_LABEL = '[Route]';
     console.error(`${LOG_LABEL} Cannot route ${error}`);
-  
   } finally {
     loading.hide();
   }
-}
+};
 
 // Init data
 const init = async () => {
-
   initVectors();
 
   // First load
@@ -73,36 +67,40 @@ const init = async () => {
   await permissionNotification();
 
   // Hash change listener
-  window.addEventListener('hashchange', async () => { 
-    
-    // Log changed
-    const LOG_LABEL = '[Page Hash]';
-    console.log(`${LOG_LABEL} Changed to ${location.hash}`);
-  
-    await routeHandler();
-    
-  }, detectIt.passiveEvents ? { passive: true } : false);
+  window.addEventListener(
+    'hashchange',
+    async () => {
+      // Log changed
+      const LOG_LABEL = '[Page Hash]';
+      console.log(`${LOG_LABEL} Changed to ${window.location.hash}`);
 
+      await routeHandler();
+    },
+    detectIt.passiveEvents ? { passive: true } : false,
+  );
 
   // Enable touch scroll passive event
-  document.addEventListener('touchstart', event => {
-    
-    // Do nothing right now
-    // Maybe later I'll figure it out someting to do here
-  
-  }, detectIt.passiveEvents ? { passive: true } : false);
-}
+  document.addEventListener(
+    'touchstart',
+    () => {
+      // Do nothing right now
+      // Maybe later I'll figure it out something to do here
+    },
+    detectIt.passiveEvents ? { passive: true } : false,
+  );
+};
 
 /**
- * Refresh content inside app sheell
+ * Refresh content inside app shell
  * Trigger hashchange event in order to refresh page
  */
 const refreshAppContent = () => {
   routeHandler();
   console.log('[App Shell] Reload page');
-}
+};
 
 // Register service worker
 registerServiceWorker(init);
 
+// eslint-disable-next-line import/prefer-default-export
 export { refreshAppContent };
